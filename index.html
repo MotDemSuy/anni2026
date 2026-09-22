@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tủ quà cho em</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Dancing+Script:wght@600;700&family=Caveat:wght@500;600&family=Lora:ital,wght@0,500;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink:#241522; --wine:#452238; --rose:#e6a8b3; --gold:#d5aa62; --paper:#fff9ee; }
+    * { box-sizing:border-box; } html,body { min-height:100%; margin:0; }
+    body { overflow-x:hidden; color:var(--paper); font-family:Manrope,sans-serif; background:radial-gradient(circle at 14% 0,#85486188,transparent 31rem),radial-gradient(circle at 90% 100%,#c89d654a,transparent 29rem),var(--ink); }
+    button { font:inherit; }
+    .ambient,.hearts { position:fixed; inset:0; pointer-events:none; overflow:hidden; } .ambient { z-index:0; }
+    .ambient span { position:absolute; top:-10vh; color:#f5cad0; opacity:.38; animation:fall linear infinite; }
+    @keyframes fall { to { transform:translate(var(--drift),120vh) rotate(240deg); } }
+    .gift-overlay { position:fixed; inset:0; z-index:20; display:grid; place-items:center; align-content:center; gap:1.35rem; text-align:center; cursor:pointer; background:radial-gradient(circle at 50% 45%,#65364f88,transparent 20rem),var(--ink); transition:opacity .65s,visibility .65s; }
+    .gift-overlay.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+    .gift-title { margin:0; padding:0 1rem; font:700 clamp(2.65rem,8vw,4.7rem)/1 "Dancing Script",cursive; text-shadow:0 5px 30px #0006; animation:enter .8s ease both; }
+    .gift-box { width:min(67vw,330px); animation:enter .8s .12s ease both; } .gift-box img { display:block; width:100%; filter:drop-shadow(0 18px 24px #0008); }
+    .gift-tap { margin:0; color:#f7dfe1; font:italic 1.2rem "Cormorant Garamond",serif; animation:pulse 1.8s infinite; }
+    .gift-overlay.opening .gift-box { animation:openBox .58s ease forwards; }
+    @keyframes enter { from { opacity:0; transform:translateY(20px) scale(.94); } to { opacity:1; transform:none; } } @keyframes pulse { 50% { opacity:.5; transform:translateY(4px); } } @keyframes openBox { to { opacity:0; transform:scale(1.2); } }
+    .app { position:relative; z-index:1; min-height:100vh; display:grid; place-items:center; padding:3rem 1.2rem; }
+    .collection { width:min(100%,1030px); text-align:center; animation:enter .75s ease both; }
+    .kicker { margin:0 0 .6rem; color:var(--rose); font-size:.72rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; }
+    h1,h2 { margin:0; font-family:"Cormorant Garamond",serif; } h1 { font-size:clamp(3rem,7vw,5.4rem); line-height:.94; } h2 { font-size:clamp(2.4rem,6vw,4.5rem); line-height:.95; }
+    .intro { max-width:35rem; margin:1rem auto 2.4rem; color:#f1dfe2; line-height:1.7; }
+    .gift-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+    .gift-card { position:relative; min-height:310px; overflow:hidden; border:1px solid #ffe9e83d; border-radius:1.5rem; padding:1.2rem; color:var(--paper); background:linear-gradient(155deg,#63354d,#2f1b2b); box-shadow:0 18px 35px #0004; cursor:pointer; transition:transform .25s,filter .35s,opacity .35s,border-color .35s; }
+    .gift-card:not(.locked):hover { transform:translateY(-8px); border-color:var(--gold); }
+    .gift-card.locked { filter:grayscale(1) brightness(.27); cursor:not-allowed; }
+    .gift-card.locked::after { content:"🔒"; position:absolute; inset:0; display:grid; place-items:center; font-size:2rem; background:#00000024; }
+    .card-number { display:block; position:relative; z-index:1; color:#f4d7da; font-size:.69rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+    .gift-card h2 { position:absolute; z-index:1; right:1rem; bottom:1rem; left:1rem; font-size:2rem; text-shadow:0 2px 14px #0008; }
+    .card-art { position:absolute; inset:2.6rem .55rem 4rem; display:grid; place-items:center; }
+    .card-art img { display:block; max-width:100%; max-height:100%; object-fit:contain; filter:drop-shadow(0 12px 12px #0008); }
+    .card-art.flower img { width:100%; height:100%; object-fit:contain; } .card-art.record img { width:115%; max-width:none; }
+    .card-hint { margin:1.35rem 0 0; min-height:1.3rem; color:#e7b0b8; font-size:.88rem; }
+    .music-toggle { position:fixed; z-index:8; right:1rem; bottom:1rem; border:1px solid #f4d9dc80; border-radius:99px; padding:.62rem .9rem; color:var(--paper); background:#362033d9; cursor:pointer; box-shadow:0 8px 24px #0005; }
+    .gift-view { display:none; width:min(100%,900px); grid-template-columns:minmax(0,1fr) minmax(280px,.85fr); gap:clamp(1.7rem,6vw,5rem); align-items:center; animation:enter .65s ease both; }
+    .gift-view.active { display:grid; } .copy { text-align:left; } .eyebrow { margin:0 0 .65rem; color:var(--rose); font-size:.72rem; font-weight:700; letter-spacing:.17em; text-transform:uppercase; }
+    .subtitle { margin:1rem 0 0; color:#f2dfe1; line-height:1.75; }
+    .message { margin:1.35rem 0 0; padding:1.1rem 1.25rem; color:#51303a; background:var(--paper); border-radius:2px 1rem 1rem; box-shadow:0 18px 45px #0003; font:italic 1.22rem/1.5 "Cormorant Garamond",serif; } .message p { margin:.35rem 0; min-height:1.2em; }
+    .gift-view.letter-plain.active { display:block; } .letter-copy { width:min(100%,620px); margin:0 auto; text-align:center; } .letter-copy .subtitle { font:italic 500 1.08rem/1.7 "Lora",serif; color:#e9d3d6; } .letter-copy .message {
+      position:relative; margin:1.6rem auto 0; max-width:560px; padding:1.5rem 1.7rem 2.2rem 3.4rem; text-align:left;
+      color:#4a3340; border-radius:4px; transform:rotate(-.6deg);
+      background:
+        linear-gradient(90deg, transparent 0, transparent 2.5rem, #cf8a8a59 2.5rem, #cf8a8a59 calc(2.5rem + 1.5px), transparent calc(2.5rem + 1.5px)),
+        radial-gradient(circle at 88% 4%, #e8c9a830, transparent 40%),
+        radial-gradient(circle at 2% 98%, #d9b48a2c, transparent 36%),
+        linear-gradient(180deg, #fdf7e7, #f5ead4);
+      background-position:0 0, 0 0, 0 0, 0 0;
+      box-shadow:0 18px 45px #0005, inset 0 0 44px #b99b6b21;
+      font:500 1.32rem/34px "Dancing Script", "Cormorant Garamond", cursive;
+      color:#37476b; text-shadow:0 0 .6px #37476b55;
+    }
+    .letter-copy .message .salut { font:600 1.9rem/34px "Dancing Script",cursive; color:#2c3a58; }
+    .letter-copy .message .cheers { font:600 1.5rem/68px "Dancing Script",cursive; color:#7c3f52; background-image:linear-gradient(transparent 0, transparent calc(100% - 1px), #d9c8a866 calc(100% - 1px)); background-size:100% 100%; background-repeat:no-repeat; }
+    .letter-copy .message .sign { font:700 2rem/68px "Dancing Script",cursive; color:#2c3a58; background-image:linear-gradient(transparent 0, transparent calc(100% - 1px), #d9c8a866 calc(100% - 1px)); background-size:100% 100%; background-repeat:no-repeat; }
+    .letter-copy .message .coffee { position:absolute; right:8%; top:16%; width:74px; height:74px; border-radius:50%; pointer-events:none; border:9px solid #8a5a2e1f; box-shadow:inset 0 0 18px #8a5a2e14, 0 0 0 26px #8a5a2e0d; transform:rotate(8deg); }
+    .letter-copy .message .stamp { position:absolute; right:10px; top:-30px; width:52px; height:60px; display:grid; place-items:center; font-size:1.5rem; color:#fff; background:radial-gradient(circle at 35% 30%,#e8a08c,#b8455c); border-radius:4px; transform:rotate(7deg); box-shadow:0 4px 12px #0004, inset 0 -3px 6px #0003; }
+    .letter-copy .message .stamp::after { content:""; position:absolute; inset:5px; border:1px dashed #ffffff70; border-radius:2px; }
+    .letter-copy .message .date { text-align:left; padding-left:.2rem; font:500 1.2rem/34px "Dancing Script",cursive; color:#5a6b8f; margin-bottom:.2rem; }
+    .letter-copy .message p { margin:0; min-height:34px; }
+    .letter-copy .message p { background-image:repeating-linear-gradient(transparent 0, transparent 33px, #d9c8a866 33px, #d9c8a866 34px); background-position:0 0; background-size:auto 34px; background-repeat:repeat-y; }
+    .letter-copy .message p + p { text-indent:1.5em; }
+    .letter-copy .message p:last-child { text-align:right; text-indent:0; padding-right:.5rem; }
+    .letter-copy .message .salut, .letter-copy .message .cheers, .letter-copy .message .sign, .letter-copy .message .date { text-indent:0; }
+    .letter-copy .message .date { text-align:left !important; width:calc(100% - 90px); }
+    .letter-copy .message::before { content:""; position:absolute; top:-14px; left:50%; width:122px; height:30px; transform:translateX(-50%) rotate(-2.5deg); background:linear-gradient(180deg,#e9b2b680,#e9b2b64d); border-left:1px dashed #ffffff59; border-right:1px dashed #ffffff59; box-shadow:0 2px 6px #0002; }
+    @media (max-width:480px){ .letter-copy .message { padding:1.2rem 1rem 1.7rem 2.6rem; background-image:linear-gradient(90deg, transparent 0, transparent 2rem, #cf8a8a59 2rem, #cf8a8a59 calc(2rem + 1.5px), transparent calc(2rem + 1.5px)), radial-gradient(circle at 88% 4%, #e8c9a830, transparent 40%), radial-gradient(circle at 2% 98%, #d9b48a2c, transparent 36%), linear-gradient(180deg, #fdf7e7, #f5ead4); } .letter-copy .message p { font-size:1.16rem; } } .message p.typing::after { content:"❘"; color:#a85d70; animation:caret .8s steps(1) infinite; } @keyframes caret { 50% { opacity:0; } }
+    /* ----- THIỆP MỜI (món quà 4) ----- */
+    .gift-view.invite-gift.active { display:block; }
+    .invite-card { width:min(100%,560px); margin:0 auto; padding:clamp(1.6rem,4vw,2.7rem); text-align:center; border:1px solid #d5aa6266; outline:1px solid #d5aa6222; outline-offset:6px; border-radius:1.6rem; color:var(--paper); background:linear-gradient(165deg,#4d2c44,#2c1829); box-shadow:0 30px 70px #0007; animation:enter .6s ease both; }
+    .inv-seal { width:58px; height:58px; margin:0 auto .9rem; display:grid; place-items:center; border-radius:50%; color:#7c2f3e; font-size:1.35rem; background:radial-gradient(circle at 35% 30%,#e8a08c,#b8455c); box-shadow:0 6px 18px #0006, inset 0 -3px 6px #0003; }
+    .inv-kicker { margin:0 0 .5rem; color:var(--rose); font-size:.7rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; }
+    .inv-title { font:700 clamp(2.6rem,8vw,3.9rem)/1.05 "Dancing Script",cursive; color:var(--gold); text-shadow:0 4px 24px #0006; }
+    .inv-names { margin:.9rem 0 0; font:600 clamp(1.05rem,3.4vw,1.45rem) "Cormorant Garamond",serif; letter-spacing:.12em; } .inv-names i { color:#e9899b; font-style:normal; }
+    .inv-divider { width:120px; height:1px; margin:1.2rem auto; background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+    .inv-when { margin:0; font:600 clamp(1.25rem,4vw,1.7rem) "Cormorant Garamond",serif; color:var(--gold); }
+    .inv-when-sub { margin:.45rem 0 0; font:italic 500 1.02rem "Cormorant Garamond",serif; color:#ecd9c4cc; }
+    .inv-place { margin:1.05rem 0 0; font-weight:700; }
+    .inv-schedule { width:min(100%,430px); margin:1.3rem auto 0; padding:0; list-style:none; text-align:left; }
+    .inv-schedule li { display:flex; gap:1rem; align-items:baseline; padding:.6rem 0; color:#f4e6e0; font-size:.97rem; border-bottom:1px dashed #d5aa6233; }
+    .inv-schedule li:last-child { border-bottom:0; }
+    .inv-schedule span { flex:0 0 7.4em; color:var(--gold); font-weight:700; font-size:.93rem; }
+    .inv-note { max-width:30rem; margin:1.25rem auto 0; font:italic 500 1.05rem/1.6 "Cormorant Garamond",serif; color:#f0dcd0; }
+    .inv-countdown { display:flex; justify-content:center; gap:.7rem; margin-top:1.5rem; }
+    .cd-box { min-width:64px; padding:.6rem .4rem .5rem; border:1px solid #d5aa624d; border-radius:.9rem; background:#ffffff0d; }
+    .cd-num { display:block; font:700 1.5rem "Cormorant Garamond",serif; color:var(--gold); }
+    .cd-label { display:block; margin-top:.15rem; font-size:.62rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#e8c9ce; }
+    .inv-rsvp { margin-top:1.5rem; border:1px solid #ffe9e8aa; border-radius:99px; padding:.85rem 1.4rem; color:var(--ink); background:linear-gradient(110deg,var(--rose),var(--gold)); cursor:pointer; font-weight:700; box-shadow:0 10px 25px #0004; }
+    .inv-yes { min-height:1.4rem; margin:.9rem 0 0; color:var(--gold); font-weight:700; letter-spacing:.06em; }
+    @media (max-width:480px){ .cd-box { min-width:56px; } .inv-schedule li { font-size:.9rem; } .inv-schedule span { flex-basis:6.6em; font-size:.85rem; } }
+    .art { position:relative; min-height:315px; display:grid; place-items:center; } .art::before { content:""; position:absolute; width:min(80vw,360px); aspect-ratio:1; border-radius:50%; background:radial-gradient(circle,#e9a6b22e,transparent 65%); }
+    .art img { position:relative; display:block; max-width:100%; } .letter-art img { width:min(86vw,370px); filter:drop-shadow(0 22px 18px #0007); animation:float 3.7s ease-in-out infinite; }
+    .flower-art { overflow:visible; border-radius:0; } .flower-art img { width:min(96vw,540px); border-radius:0; filter:drop-shadow(0 22px 18px #0007); } .flower-gift .art { min-height:440px; } .flower-gift h2 { font-size:clamp(2rem,4.4vw,3.5rem); } .flower-gift .subtitle { max-width:27rem; font-size:.92rem; } .record-art img { width:min(86vw,420px); filter:drop-shadow(0 25px 23px #0008); animation:float 3.9s .3s ease-in-out infinite; }
+    @keyframes float { 50% { transform:translateY(-12px) rotate(1.5deg); } }
+    .back { margin-top:1.55rem; border:1px solid #ffe9e8aa; border-radius:99px; padding:.82rem 1.25rem; color:var(--ink); background:linear-gradient(110deg,var(--rose),var(--gold)); cursor:pointer; font-weight:700; box-shadow:0 10px 25px #0004; }
+    .modal { position:fixed; z-index:15; inset:0; display:none; place-items:center; padding:1rem; background:#170d17bc; backdrop-filter:blur(8px); } .modal.active { display:grid; }
+    .question-box { width:min(100%,470px); padding:2rem; border:1px solid #f9e5e570; border-radius:1.5rem; color:var(--ink); text-align:center; background:var(--paper); box-shadow:0 28px 70px #0009; animation:enter .45s ease both; }
+    .question-box .kicker { color:#9c5667; } .question-box h2 { font-size:2.35rem; } .answers { display:grid; gap:.65rem; margin-top:1.5rem; } .answer { border:1px solid #d9b2b6; border-radius:.8rem; padding:.76rem 1rem; color:#512d39; background:#fff; cursor:pointer; transition:.2s; } .answer:hover { color:#fff; background:#a85d70; }
+    .answer.wrong { animation:shake .35s; background:#b94f5b; color:white; } @keyframes shake { 25% { transform:translateX(-7px); } 75% { transform:translateX(7px); } } .question-hint { min-height:1.3rem; margin:1rem 0 0; color:#9c5667; font-size:.88rem; }
+    .calendar-picker { margin-top:1.25rem; text-align:left; } .calendar-controls { display:flex; gap:.55rem; margin-bottom:.7rem; } .calendar-controls select { flex:1; min-width:0; padding:.62rem; border:1px solid #d9b2b6; border-radius:.65rem; color:#512d39; background:#fff; font:inherit; }
+    .calendar-weekdays,.calendar-days { display:grid; grid-template-columns:repeat(7,1fr); gap:.28rem; } .calendar-weekdays span { padding:.35rem 0; color:#9c5667; font-size:.7rem; font-weight:700; text-align:center; } .calendar-day { aspect-ratio:1; border:0; border-radius:50%; color:#512d39; background:transparent; cursor:pointer; } .calendar-day:hover { background:#f5dce0; } .calendar-day.selected { color:#fff; background:#a85d70; box-shadow:0 3px 8px #a85d7077; } .calendar-day.blank { cursor:default; }
+    .date-confirm { width:100%; margin-top:1rem; border:0; border-radius:.8rem; padding:.78rem; color:#fff; background:#a85d70; cursor:pointer; font-weight:700; }
+    .hearts { z-index:7; } .hearts span { position:absolute; bottom:-2rem; color:var(--rose); animation:heart 4s linear forwards; } @keyframes heart { to { transform:translate(var(--x),-110vh) rotate(260deg); opacity:0; } }
+    @media (max-width:760px) { .gift-grid { grid-template-columns:repeat(2,1fr); } .gift-card { min-height:255px; } .gift-view { grid-template-columns:1fr; text-align:center; } .copy { order:2; text-align:center; } .art { order:1; min-height:265px; } .flower-gift .art { min-height:350px; } .message { text-align:left; } }
+    @media (max-width:390px) { .gift-grid { gap:.65rem; } .gift-card { min-height:220px; padding:.8rem; border-radius:1rem; } .gift-card h2 { font-size:1.55rem; } }
+    /* ----- VÒNG QUAY MAY MẮN (bấm món quà 3) ----- */
+    .wheel-overlay { position:fixed; inset:0; z-index:30; display:none; align-items:center; justify-content:center; padding:1rem; background:#170d17d9; backdrop-filter:blur(10px); }
+    .wheel-overlay.is-open { display:flex; }
+    .wheel-box { position:relative; text-align:center; animation:enter .45s ease both; }
+    .wheel-title { margin:0 0 1.1rem; font:700 clamp(1.6rem,6vw,2.2rem) "Cormorant Garamond",serif; color:var(--paper); }
+    .wheel-wrap { position:relative; width:min(74vw,320px); aspect-ratio:1; margin:0 auto; --wheel:min(74vw,320px); }
+    .wheel { width:100%; height:100%; border-radius:50%; position:relative; border:6px solid var(--gold); box-shadow:0 0 0 4px #d5aa622e,0 22px 60px -18px #000c; transition:transform 4.4s cubic-bezier(.12,.72,.05,1); background:conic-gradient(from 0deg,#e9b2b6 0 45deg,#d3b380 45deg 90deg,#c98db1 90deg 135deg,#e4cfa8 135deg 180deg,#e9b2b6 180deg 225deg,#d3b380 225deg 270deg,#c98db1 270deg 315deg,#e4cfa8 315deg 360deg); }
+    .wn { position:absolute; transform:translate(-50%,-50%); z-index:1; font:700 clamp(1.05rem,4.8vw,1.5rem) "Cormorant Garamond",serif; color:#241522; pointer-events:none; }
+    .wn0 { left:61.9%; top:21.4%; } .wn1 { left:78.6%; top:38.1%; } .wn2 { left:78.6%; top:61.9%; } .wn3 { left:61.9%; top:78.6%; }
+    .wn4 { left:38.1%; top:78.6%; } .wn5 { left:21.4%; top:61.9%; } .wn6 { left:21.4%; top:38.1%; } .wn7 { left:38.1%; top:21.4%; }
+    .wheel-hub { position:absolute; left:50%; top:50%; width:18%; aspect-ratio:1; transform:translate(-50%,-50%); border-radius:50%; background:radial-gradient(circle at 35% 30%,#fff7e8,var(--gold) 70%); box-shadow:0 4px 14px #0008; z-index:2; }
+    .wheel-pointer { position:absolute; left:50%; top:-13px; transform:translateX(-50%); width:0; height:0; border-left:13px solid transparent; border-right:13px solid transparent; border-top:22px solid var(--paper); filter:drop-shadow(0 3px 6px #000a); z-index:3; }
+    .wheel-btn { margin-top:1.2rem; border:0; border-radius:99px; padding:.82rem 2.6rem; color:#241522; background:linear-gradient(110deg,var(--rose),var(--gold)); cursor:pointer; font-weight:700; letter-spacing:.14em; box-shadow:0 10px 25px #0005; transition:transform .25s,opacity .3s; }
+    .wheel-btn:hover:not(:disabled) { transform:translateY(-2px); }
+    .wheel-btn:disabled { opacity:.45; cursor:default; }
+    .wheel-close { position:absolute; top:-2.6rem; right:-.4rem; border:0; background:transparent; color:#f1dfe2; font-size:1.6rem; cursor:pointer; padding:.3rem; }
+    .wheel-result { margin:.9rem 0 0; min-height:1.5em; color:#f7dfe1; font:italic 1.15rem "Cormorant Garamond",serif; }
+    .wheel-result a { color:var(--rose); }
+    .wheel-note { margin:.7rem 0 0; color:#e7b0b8; font-size:.72rem; }
+    @media (max-height:640px) { .wheel-title { margin-bottom:.5rem; } .wheel-wrap { width:min(56vh,74vw); --wheel:min(56vh,74vw); } }
+  </style>
+</head>
+<body>
+  <div class="ambient" id="ambient"></div><div class="hearts" id="hearts"></div>
+  <div class="gift-overlay" id="giftOverlay" onclick="openGiftBox()" role="button" tabindex="0" aria-label="Mở hộp quà"><h1 class="gift-title">Một món quà nhỏ cho em ♡</h1><div class="gift-box"><img src="gift-box-white-circle.gif" alt="Hộp quà"></div><p class="gift-tap">Chạm để mở quà ↓</p></div>
+  <button class="music-toggle" id="musicToggle" onclick="toggleMusic()">♫ Bật nhạc</button>
+  <main class="app">
+    <section class="collection" id="collection">
+      <p class="kicker">Bốn món quà đang chờ em</p><h1>Chọn món quà đầu tiên</h1><p class="intro">Mỗi món quà sẽ mở ra khi em trả lời đúng câu hỏi nhỏ. Món tiếp theo sẽ sáng lên sau khi em nhận món quà trước đó.</p>
+      <div class="gift-grid" id="giftGrid"></div><p class="card-hint" id="cardHint">Hãy chạm vào món quà đầu tiên nhé.</p>
+    </section>
+    <section class="gift-view" id="giftView"></section>
+  </main>
+  <div class="modal" id="questionModal"><div class="question-box"><p class="kicker">Mở khóa món quà</p><h2 id="questionText"></h2><div class="answers" id="answers"></div><p class="question-hint" id="questionHint"></p></div></div>
+  <div class="wheel-overlay" id="wheelOverlay" role="dialog" aria-modal="true" aria-label="Vòng quay may mắn"><div class="wheel-box"><button class="wheel-close" id="wheelClose" aria-label="Đóng">×</button><h2 class="wheel-title">Vòng quay may mắn ♡</h2><div class="wheel-wrap"><div class="wheel-pointer"></div><div class="wheel" id="wheel"><span class="wn wn0">1</span><span class="wn wn1">2</span><span class="wn wn2">3</span><span class="wn wn3">4</span><span class="wn wn4">1</span><span class="wn wn5">2</span><span class="wn wn6">3</span><span class="wn wn7">4</span><div class="wheel-hub"></div></div></div><div><button class="wheel-btn" id="spinBtn">QUAY</button></div><p class="wheel-result" id="wheelResult"></p><p class="wheel-note">Quay xong mở quà — bấm Back (hoặc làm mới trang) để quay tiếp món khác nhé</p></div></div>
+  <script>
+    /* Có thể thay câu hỏi, đáp án và lời nhắn tại đây. correct là vị trí đáp án đúng, bắt đầu từ 0. */
+    const GIFTS=[
+      {title:'Bức thư đầu tiên',short:'Bức thư',type:'letter',image:'lecture.png',music:'thu1.mp3',question:'Ngày chúng mình xác nhận quen nhau là ngày nào?',dateAnswer:{day:24,month:9,year:2022},subtitle:'Có những điều anh thấy viết ra sẽ dịu dàng hơn là nói thành lời.',message:['Gửi người anh yêu,','Cảm ơn em vì đã luôn ở bên cạnh, cùng anh trưởng thành, cùng anh trải qua bao nhiêu khó khăn, gian khổ. Dù biết là thời gian qua chúng mình có những khuyết điểm của bản thân rồi gây ra xích mích. Anh tin rằng không ai trên đời này sinh ra đã hợp nhau và sinh ra đã đối lập với nhau cả. Anh tin rằng hợp nhau là do chúng ta hạ cái tôi của bản thân mình xuống, lắng nghe nhau nhiều hơn, chấp nhận những sai lầm của nhau, cùng sửa đổi và cần nhau hơn khi chúng ta nóng giận và lạc lối. Chính vì vậy, anh tin và mong rằng anh sẽ sửa được những điều vô tâm mà anh đang có và sẽ chững chạc hơn nữa trong cảm xúc của mình.','4 năm vừa qua, anh cảm ơn em đã chịu đựng anh, đã bao dung cho những sai lầm của anh dù đã thất vọng hết lần này đến lần khác. Anh mong mọi thứ trong tương lai, những cái xấu em phải chịu sẽ là hai chữ “đã từng”.','Chúng mình đã quen nhau được 4 năm rồi đấy em à. Cảm ơn em đã yêu thương, bao dung và quan tâm anh trong 4 năm qua nhé. Tương lai mình tiếp tục cố gắng dìu dắt nhau từng chút một nữa em nhé, anh vô cùng biết ơn em đã đồng hành, ở bên anh trong suốt thời gian qua. Mong rằng chúng mình vẫn duy trì được những điều tốt và sửa đổi được những điều xấu. Tuy rằng sẽ có cãi vã, nhưng anh tin rằng chúng ta sẽ cùng nhau vượt qua, cùng nhau cố gắng nha em.','Chúc mừng 4 năm của chúng ta. Hãy tận hưởng những món quà anh gửi gắm cho em nhé.','Thương em nhiều, anh ♡'],melody:[261.63,329.63,392,523.25]},
+      {title:'Một bó hoa',short:'Hoa',type:'flower',cardImage:'flower1.gif',image:'lấy_mỗi_hình_bó_hoa_là_trung_t.gif',music:'hoa.mp3',question:'Bó hoa này dành cho ai?',answers:['Dành cho em','Dành cho anh','Dành cho mọi người'],correct:0,subtitle:'Một bó hoa thật xinh, để hôm nay của em có thêm một chút dịu dàng và rực rỡ.',message:null,melody:[293.66,369.99,440,587.33]},
+      {title:'Chiếc đĩa than',short:'Đĩa than',type:'record',image:'diathan.gif',question:'Điều gì sẽ vang lên khi đĩa than quay?',answers:['Một bản nhạc','Tiếng chuông','Một câu đố'],correct:0,subtitle:'Mong rằng mỗi khi bản nhạc này vang lên, em sẽ nhớ về một khoảnh khắc thật đẹp của hai đứa mình.',message:null,melody:[220,261.63,329.63,440]},
+      {title:'Thiệp mời kỷ niệm 4 năm',short:'Thiệp mời',type:'invite',image:'lecture.png',question:'Lời cuối cùng anh muốn gửi là gì?',answers:['Yêu em','Tạm biệt','Chúc ngủ ngon'],correct:0,melody:[329.63,392,493.88,659.25],music:'thiep.mp3',invite:{dateISO:'2026-09-25T17:00:00+07:00',whenMain:'Thứ Sáu, ngày 25.09.2026',whenSub:'Hẹn em một chiều thứ Sáu thật đặc biệt',schedule:[{time:'17:00 – 17h30',what:'Anh đến đón em'},{time:'17h30 – 18h',what:'Đi lấy quà'},{time:'18h – 18h30',what:'Đi tới quán Lẩu Hương Cảng — 95 Lê Lợi'},{time:'20:00',what:'Mình đi cà phê'}],note:'Anh sắp xếp hết rồi — việc của em chỉ là đến đúng giờ và xinh đẹp thôi ♡'}}
+    ];
+    // Đặt thành false khi muốn quay lại chế độ mở khóa từng món quà bằng câu hỏi.
+    const PREVIEW_ALL_GIFTS=true;
+    let unlocked=PREVIEW_ALL_GIFTS?GIFTS.length-1:0,activeQuestion=null,openedGiftIndex=null,audioContext=null,musicTimer=null,musicOn=false,currentMelody=GIFTS[0].melody,bgAudio=null,currentMusicFile=null;
+    const grid=document.getElementById('giftGrid'),collection=document.getElementById('collection'),giftView=document.getElementById('giftView');
+    function renderCards(){grid.innerHTML=GIFTS.map((gift,index)=>`<article class="gift-card ${index>unlocked?'locked':''}" onclick="chooseGift(${index})"><span class="card-number">Món quà ${index+1}</span><div class="card-art ${gift.type}"><img src="${gift.cardImage||gift.image}" alt="${gift.title}"></div><h2>${gift.short}</h2></article>`).join('')}
+    function chooseGift(index){if(index>unlocked){document.getElementById('cardHint').textContent='Hãy mở món quà đang sáng trước nhé.';return}if(index===2){openWheel();return}if(PREVIEW_ALL_GIFTS){showGift(index);return}activeQuestion=index;const gift=GIFTS[index];document.getElementById('questionText').textContent=gift.question;document.getElementById('questionHint').textContent='';const answers=document.getElementById('answers');answers.innerHTML='';if(gift.dateAnswer){renderDateQuestion(gift.dateAnswer);document.getElementById('questionModal').classList.add('active');return}answers.innerHTML=gift.answers.map((answer,i)=>`<button class="answer" onclick="answerQuestion(${i},this)">${answer}</button>`).join('');document.getElementById('questionModal').classList.add('active')}
+    function answerQuestion(choice,button){const gift=GIFTS[activeQuestion];if(choice!==gift.correct){button.classList.add('wrong');document.getElementById('questionHint').textContent='Chưa đúng rồi, thử lại nhé.';setTimeout(()=>button.classList.remove('wrong'),400);return}unlockQuestion()}
+    function unlockQuestion(){document.getElementById('questionHint').textContent='Đúng rồi! Món quà đang mở ra...';setTimeout(()=>{document.getElementById('questionModal').classList.remove('active');showGift(activeQuestion)},500)}
+    function renderDateQuestion(answer){let month=new Date().getMonth()+1,year=new Date().getFullYear(),selectedDay=null;const answers=document.getElementById('answers');answers.innerHTML=`<div class="calendar-picker"><div class="calendar-controls"><select id="calendarMonth">${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${i+1===month?'selected':''}>Tháng ${i+1}</option>`).join('')}</select><select id="calendarYear">${Array.from({length:16},(_,i)=>{const value=2015+i;return `<option value="${value}" ${value===year?'selected':''}>${value}</option>`}).join('')}</select></div><div class="calendar-weekdays"><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span></div><div class="calendar-days" id="calendarDays"></div><button class="date-confirm" onclick="checkDateAnswer()">Xác nhận ngày đã chọn</button></div>`;const monthSelect=document.getElementById('calendarMonth'),yearSelect=document.getElementById('calendarYear');function draw(){month=+monthSelect.value;year=+yearSelect.value;selectedDay=null;const days=document.getElementById('calendarDays');const first=new Date(year,month-1,1).getDay();const offset=first===0?6:first-1;const count=new Date(year,month,0).getDate();days.innerHTML=Array.from({length:offset},()=>'<span class="calendar-day blank"></span>').join('')+Array.from({length:count},(_,i)=>`<button class="calendar-day" data-day="${i+1}">${i+1}</button>`).join('');days.querySelectorAll('button').forEach(button=>button.onclick=()=>{days.querySelectorAll('button').forEach(day=>day.classList.remove('selected'));button.classList.add('selected');selectedDay=+button.dataset.day})}monthSelect.onchange=draw;yearSelect.onchange=draw;window.selectedDateForGift=()=>({day:selectedDay,month,year});draw()}
+    function checkDateAnswer(){const picked=window.selectedDateForGift&&window.selectedDateForGift(),answer=GIFTS[activeQuestion].dateAnswer,hint=document.getElementById('questionHint');if(!picked||picked.day!==answer.day||picked.month!==answer.month||picked.year!==answer.year){hint.textContent='Chưa đúng ngày rồi, em thử lại nhé.';return}unlockQuestion()}
+    function showGift(index){const gift=GIFTS[index];openedGiftIndex=index;collection.style.display='none';giftView.className=`gift-view active ${gift.type}-gift${gift.type==='letter'&&!gift.invite?' letter-plain':''}`;giftView.innerHTML=gift.invite?`<div class="invite-card"><div class="inv-seal">♥</div><p class="inv-kicker">Thiệp mời</p><h2 class="inv-title">Kỷ niệm 4 năm</h2><p class="inv-names">MẠNH KHA <i>♥</i> HUYỀN TRANG</p><div class="inv-divider"></div><p class="inv-when">${gift.invite.whenMain}</p><p class="inv-when-sub">${gift.invite.whenSub}</p><ol class="inv-schedule">${gift.invite.schedule.map(s=>`<li><span>${s.time}</span>${s.what}</li>`).join('')}</ol><p class="inv-note">${gift.invite.note}</p><div class="inv-countdown" aria-label="Đếm ngược đến buổi hẹn"><div class="cd-box"><span class="cd-num" id="cdD">--</span><span class="cd-label">Ngày</span></div><div class="cd-box"><span class="cd-num" id="cdH">--</span><span class="cd-label">Giờ</span></div><div class="cd-box"><span class="cd-num" id="cdM">--</span><span class="cd-label">Phút</span></div><div class="cd-box"><span class="cd-num" id="cdS">--</span><span class="cd-label">Giây</span></div></div><button class="inv-rsvp" id="rsvpBtn">EM SẼ ĐẾN CHỨ? ♥</button><p class="inv-yes" id="rsvpMsg"></p><button class="back" onclick="backToCollection()">Quay về tủ quà →</button></div>`:gift.type==='letter'?`<div class="copy letter-copy"><p class="subtitle">${gift.subtitle}</p>${gift.message?`<div class="message"><span class="coffee"></span><span class="stamp">♥</span><p class="date" data-t="24.09.2026"></p>${gift.message.map((line,i)=>`<p class="${i===0?'salut':i===4?'cheers':i===5?'sign':''}" data-t="${line}"></p>`).join('')}</div>`:''}<button class="back" onclick="backToCollection()">Quay về tủ quà →</button></div>`:`<div class="copy"><p class="eyebrow">Món quà thứ ${index+1} · giai điệu riêng đang vang lên</p><h2>${gift.title}</h2><p class="subtitle">${gift.subtitle}</p>${gift.message?`<div class="message">${gift.message.map(line=>`<p data-t="${line}"></p>`).join('')}</div>`:''}<button class="back" onclick="backToCollection()">Quay về tủ quà →</button></div><div class="art ${gift.type}-art"><img src="${gift.image}" alt="${gift.title}"></div>`;currentMelody=gift.melody;currentMusicFile=gift.music||null;startMusic();if(gift.message&&!gift.invite)startTyping();if(gift.invite){startCountdown(gift.invite.dateISO);document.getElementById('rsvpBtn').onclick=()=>{document.getElementById('rsvpMsg').textContent='HẸN GẶP EM Ở ĐÓ ♥';launchHearts()}}else stopCountdown();window.scrollTo({top:0,behavior:'smooth'});launchHearts()}
+    let typingTimer=null;function startTyping(){clearTimeout(typingTimer);const ps=[...document.querySelectorAll('#giftView .message p[data-t]')];if(!ps.length)return;ps.forEach(p=>{p.textContent='';p.classList.remove('typing')});const texts=ps.map(p=>p.dataset.t),TOTAL=55000,chars=texts.join('').length,interval=Math.max(20,Math.floor(TOTAL/chars));let li=0,ci=0;ps[0].classList.add('typing');function step(){if(li>=ps.length)return;const t=texts[li];ci++;ps[li].textContent=t.slice(0,ci);if(ci>=t.length){ps[li].classList.remove('typing');li++;ci=0;if(li<ps.length)ps[li].classList.add('typing')}if(li<ps.length)typingTimer=setTimeout(step,interval)}typingTimer=setTimeout(step,interval)}function stopTyping(finish){clearTimeout(typingTimer);typingTimer=null;if(finish)document.querySelectorAll('#giftView .message p[data-t]').forEach(p=>{p.classList.remove('typing');p.textContent=p.dataset.t})}
+    let cdTimer=null;function startCountdown(iso){stopCountdown();const target=new Date(iso).getTime(),elD=document.getElementById('cdD');if(!elD)return;const tick=()=>{const t=Math.max(0,target-Date.now());elD.textContent=Math.floor(t/864e5);document.getElementById('cdH').textContent=String(Math.floor(t%864e5/36e5)).padStart(2,'0');document.getElementById('cdM').textContent=String(Math.floor(t%36e5/6e4)).padStart(2,'0');document.getElementById('cdS').textContent=String(Math.floor(t%6e4/1e3)).padStart(2,'0')};tick();cdTimer=setInterval(tick,1e3)}function stopCountdown(){clearInterval(cdTimer);cdTimer=null}
+    function backToCollection(){stopCountdown();stopTyping();giftView.className='gift-view';giftView.innerHTML='';collection.style.display='block';if(openedGiftIndex===unlocked&&unlocked< GIFTS.length-1)unlocked++;renderCards();document.getElementById('cardHint').textContent=unlocked===GIFTS.length-1?'Tất cả món quà đã được mở khóa ♡':`Món quà thứ ${unlocked+1} đã sáng lên. Chạm để mở nhé.`;stopMusic();window.scrollTo({top:0,behavior:'smooth'})}
+    function openGiftBox(){const overlay=document.getElementById('giftOverlay');if(overlay.classList.contains('hidden'))return;overlay.classList.add('opening');try{sessionStorage.setItem('giftBoxOpened','1')}catch(e){}setTimeout(()=>overlay.classList.add('hidden'),600)}
+    function note(freq,duration,time){const oscillator=audioContext.createOscillator(),gain=audioContext.createGain();oscillator.type='sine';oscillator.frequency.value=freq;gain.gain.setValueAtTime(.0001,time);gain.gain.exponentialRampToValueAtTime(.07,time+.04);gain.gain.exponentialRampToValueAtTime(.0001,time+duration);oscillator.connect(gain).connect(audioContext.destination);oscillator.start(time);oscillator.stop(time+duration+.03)}
+    function playPhrase(){if(!musicOn||!audioContext)return;const now=audioContext.currentTime+.05;currentMelody.forEach((freq,i)=>note(freq,.5,now+i*.52));musicTimer=setTimeout(playPhrase,currentMelody.length*520+220)}
+    function startMusic(){stopMusic();musicOn=true;document.getElementById('musicToggle').textContent='♫ Tắt nhạc';if(currentMusicFile){if(!bgAudio)bgAudio=new Audio(currentMusicFile);bgAudio.loop=true;bgAudio.volume=.75;bgAudio.currentTime=0;bgAudio.play().catch(()=>{});return}if(!audioContext)audioContext=new(window.AudioContext||window.webkitAudioContext)();audioContext.resume();playPhrase()}
+    function stopMusic(){musicOn=false;clearTimeout(musicTimer);if(bgAudio){bgAudio.pause();bgAudio.currentTime=0}document.getElementById('musicToggle').textContent='♫ Bật nhạc'}
+    function toggleMusic(){if(musicOn)stopMusic();else startMusic()}
+    function launchHearts(){const wrap=document.getElementById('hearts');wrap.innerHTML='';for(let i=0;i<18;i++){const heart=document.createElement('span');heart.textContent=i%4?'♥':'✦';heart.style.left=Math.random()*100+'%';heart.style.setProperty('--x',(Math.random()*130-65)+'px');heart.style.fontSize=(.8+Math.random()*1.15)+'rem';heart.style.animationDelay=Math.random()*1.2+'s';wrap.appendChild(heart)}}
+    document.getElementById('giftOverlay').addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' ')openGiftBox()});
+    const ambient=document.getElementById('ambient');for(let i=0;i<22;i++){const particle=document.createElement('span');particle.textContent=i%3?'•':'✦';particle.style.left=Math.random()*100+'%';particle.style.setProperty('--drift',(Math.random()*120-60)+'px');particle.style.animationDuration=(9+Math.random()*10)+'s';particle.style.animationDelay=-Math.random()*14+'s';ambient.appendChild(particle)}
+    renderCards();
+    // Đã mở hộp quà trong phiên này rồi (bấm Back về / F5): vào thẳng màn
+    // chọn quà, không bắt chạm hộp quà lại từ đầu.
+    try{if(sessionStorage.getItem('giftBoxOpened')==='1'){const ov=document.getElementById('giftOverlay');ov.style.transition='none';ov.classList.add('hidden');}}catch(e){}
+    /* ----- Vòng quay may mắn: bấm món quà 3 — trúng số nào mở album đó.
+       8 ô (12.5%/ô), ô đối xứng cùng màu cùng số → mỗi số vẫn 25%.
+       Mỗi lần mở trang quay được một lần, làm mới trang để quay lại. ----- */
+    const WHEEL_PRIZES=[
+      {num:1,name:'Cuốn album bốn năm',href:'love-album/index.html'},
+      {num:2,name:'Bốn năm — câu chuyện nhỏ',href:'love-story/index.html'},
+      {num:3,name:'Dòng thời gian kỷ niệm',href:'memory-timeline/index.html'},
+      {num:4,name:'Đĩa than & lá thư',href:'KyNiem4Nam/index.html'}
+    ];
+    let wheelSpun=false,wheelSpinning=false;
+    const wheelOverlay=document.getElementById('wheelOverlay'),spinBtn=document.getElementById('spinBtn'),wheelResult=document.getElementById('wheelResult');
+    function openWheel(){wheelOverlay.classList.add('is-open');if(wheelSpun){spinBtn.disabled=true;wheelResult.innerHTML='Bạn đã quay món này rồi — bấm Back hoặc <a href="javascript:location.reload()">làm mới trang</a> để quay tiếp nhé!'}}
+    function closeWheel(){wheelOverlay.classList.remove('is-open')}
+    document.getElementById('wheelClose').addEventListener('click',closeWheel);
+    wheelOverlay.addEventListener('click',e=>{if(e.target===wheelOverlay)closeWheel()});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeWheel()});
+    spinBtn.addEventListener('click',()=>{
+      if(wheelSpun||wheelSpinning)return;
+      wheelSpinning=true;spinBtn.disabled=true;wheelResult.textContent='';
+      const pick=Math.floor(Math.random()*8),num=pick%4+1;
+      const target=5*360+(360-(pick*45+22.5));
+      document.getElementById('wheel').style.transform='rotate('+target+'deg)';
+      setTimeout(()=>{
+        wheelSpinning=false;wheelSpun=true;
+        const p=WHEEL_PRIZES[num-1];
+        wheelResult.innerHTML='Trúng món '+num+': <a href="'+p.href+'">'+p.name+'</a> ♡<br><button class="wheel-btn" id="openPrize" style="margin-top:.9rem;padding:.72rem 2.1rem;">MỞ QUÀ →</button>';
+        document.getElementById('openPrize').addEventListener('click',()=>{location.href=p.href});
+      },4600);
+    });
+    // Bấm Back quay về từ album: trình duyệt thường khôi phục trang từ bộ nhớ
+    // đệm kèm trạng thái cũ — nạp lại để vòng quay mở lại như mới, quay tiếp được.
+    window.addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
+  </script>
+</body>
+</html>

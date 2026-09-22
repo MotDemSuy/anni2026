@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350">
+  <!-- Placeholder khi thiếu ảnh: gradient rượu vang + viền vàng mảnh + tim mờ -->
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0" stop-color="#2a1420"/>
+      <stop offset="0.55" stop-color="#3a1626"/>
+      <stop offset="1" stop-color="#1c0d15"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.55">
+      <stop offset="0" stop-color="#8e2f4d" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#8e2f4d" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1080" height="1350" fill="url(#g)"/>
+  <rect width="1080" height="1350" fill="url(#glow)"/>
+  <g transform="translate(540 585) scale(9.5)" fill="#e9b2b6" fill-opacity="0.5">
+    <path d="M12 21s-8.2-5.4-10.4-9.6C-.2 7.6 2.2 3.6 6 3.6c2.3 0 4.4 1.4 6 3.6 1.6-2.2 3.7-3.6 6-3.6 3.8 0 6.2 4 4.4 7.8C20.2 15.6 12 21 12 21z"/>
+  </g>
+  <rect x="26" y="26" width="1028" height="1298" fill="none" stroke="#cfa66b" stroke-opacity="0.35" stroke-width="2"/>
+  <text x="540" y="1210" text-anchor="middle" font-family="Georgia, serif" font-size="44" letter-spacing="14" fill="#f2e8dd" fill-opacity="0.55">ANNIVERSARY</text>
+</svg>

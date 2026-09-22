@@ -1,0 +1,9 @@
+MỞ TRANG KỶ NIỆM
+
+1. Mở index.html bằng trình duyệt.
+2. Muốn bật nhạc: chép file MP3 bạn có quyền sử dụng vào thư mục KyNiem4Nam,
+   đổi tên thành nhac.mp3, rồi bấm “Bật nhạc”.
+3. Muốn thay ảnh ở tâm đĩa than: chép ảnh vuông vào assets và đặt tên
+   anh-cua-chung-minh.jpg.
+4. Nội dung thư và các câu chạy trên màn hình có thể sửa trực tiếp ở phần
+   const letter và const lyrics trong index.html.

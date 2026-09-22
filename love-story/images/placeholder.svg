@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1500" role="img" aria-label="A memory waiting to be added">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#b2907e"/><stop offset=".5" stop-color="#765e54"/><stop offset="1" stop-color="#312827"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bg)"/>
+  <circle cx="600" cy="690" r="190" fill="none" stroke="#f1e4d9" stroke-width="2" opacity=".65"/>
+  <path d="M600 790c-150-85-210-155-210-245 0-88 110-125 210-25 100-100 210-63 210 25 0 90-60 160-210 245Z" fill="#f1e4d9" opacity=".78"/>
+  <text x="600" y="1080" fill="#f1e4d9" font-family="Georgia,serif" font-size="42" text-anchor="middle" letter-spacing="8">MỘT KỶ NIỆM</text>
+  <text x="600" y="1145" fill="#f1e4d9" font-family="Arial,sans-serif" font-size="18" text-anchor="middle" letter-spacing="5" opacity=".75">ĐANG CHỜ ĐƯỢC THÊM VÀO</text>
+</svg>

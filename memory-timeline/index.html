@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#1a1114" />
+  <title>Mạnh Kha ♥ Huyền Trang — Bốn Năm</title>
+  <meta name="description" content="Một cuốn album kỷ niệm tình yêu tương tác." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Be+Vietnam+Pro:wght@200;300;400;500;600&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- Ảnh đầu tiên được tải sớm để Page 01 hiện ngay -->
+  <link rel="preload" as="image" href="images/2022.jpg" />
+  <link rel="preload" as="audio" href="music/Bon Nam.mp3" />
+</head>
+<body>
+  <!-- Nền global: vignette + film grain (luôn nằm dưới mọi page) -->
+  <div class="global-bg" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- BOKEH: chỉ hiện ở FINAL CHORUS / OUTRO (bật bằng class trên #stage) -->
+  <div id="bokeh" class="bokeh" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <!-- Sân khấu: các page được render vào đây -->
+  <main id="stage" class="stage" aria-live="polite"></main>
+
+  <!-- Thanh dưới: tiến trình nhạc (chỉ hiển thị, không tương tác) -->
+  <footer class="bottom-bar">
+    <div class="progress-track" aria-hidden="true">
+      <div id="progressFill" class="progress-fill"></div>
+    </div>
+    <div class="bottom-row">
+      <span id="timeNow" class="time">0:00</span>
+      <span id="timeSong" class="time time--song">—</span>
+    </div>
+  </footer>
+
+  <!-- Music player -->
+  <button id="musicToggle" class="music-toggle" aria-label="Bật / tắt nhạc" title="Bật / tắt nhạc">
+    <span class="disc"><span class="disc-note">♫</span></span>
+    <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>
+  </button>
+
+  <!-- Màn hình mở đầu -->
+  <div id="intro" class="intro" role="dialog" aria-modal="true" aria-label="Màn hình mở đầu">
+    <div class="intro__inner">
+      <div class="intro__heart-wrap" aria-hidden="true"><span class="intro__date">24</span><span class="intro__heart">♥</span><span class="intro__date">9</span></div>
+      <p class="intro__eyebrow">Một cuốn album kỷ niệm</p>
+      <h1 class="intro__title intro__names">
+        <span class="intro__name">MẠNH KHA</span>
+        <span class="intro__heart-beat" aria-hidden="true">♥</span>
+        <span class="intro__name">HUYỀN TRANG</span>
+      </h1>
+      <p class="intro__song">♫ Bốn Năm</p>
+      <button id="startBtn" class="intro__btn">Bắt đầu</button>
+      <p class="intro__tip">Mở loa lên nhé 🎧 — album sẽ tự lật trang theo nhạc</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
