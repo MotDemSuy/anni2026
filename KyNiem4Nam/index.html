@@ -42,27 +42,62 @@
     .music-toggle { border: 0; background: transparent; color: var(--muted); cursor: pointer; padding: .75rem; font-size: .78rem; letter-spacing: .08em; }
     .next { border: 1px solid var(--gold); border-radius: 999px; padding: .78rem 1.3rem; color: #25180d; background: var(--gold); cursor: pointer; box-shadow: 0 8px 24px #0004; transition: transform .2s, box-shadow .2s, background .2s; }
     .next:hover { transform: translateY(-2px); background: #f2d18c; box-shadow: 0 12px 28px #0006; }
+
+    /* Màn mở đầu: lời chúc + trái tim + nút mở nhạc */
+    #introScreen { position: fixed; inset: 0; z-index: 5; display: grid; place-items: center; padding: 1.5rem; text-align: center; cursor: pointer; background: radial-gradient(circle at 50% 42%, #503624 0, #2c1d18 26%, #15100e 64%); transition: opacity 1.05s ease, transform 1.05s ease, visibility 0s linear 1.05s; }
+    #introScreen::after { content: ""; position: absolute; inset: 0; opacity: .25; pointer-events: none; background-image: radial-gradient(rgba(255,255,255,.25) .6px, transparent .7px); background-size: 8px 8px; mix-blend-mode: soft-light; }
+    .intro-box { position: relative; animation: introIn 1.1s ease both .15s; }
+    @keyframes introIn { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+    .intro-msg { margin: 0 0 2.4rem; font: 500 clamp(2.3rem, 8vw, 4rem)/1.3 "Great Vibes", cursive; color: #f5d48e; text-shadow: 0 3px 24px #c88e3066; }
+    .intro-heart { display: inline-block; color: #e79aa4; transform: translateY(.05em); animation: heartBeat 1.5s ease-in-out infinite; }
+    @keyframes heartBeat { 0%, 100% { transform: translateY(.05em) scale(1); } 25% { transform: translateY(.05em) scale(1.25); } 40% { transform: translateY(.05em) scale(.96); } }
+    .intro-btn { display: inline-flex; align-items: center; gap: .65rem; border: 1px solid #ffe9c9aa; border-radius: 999px; padding: .95rem 1.8rem; color: #25180d; background: var(--gold); cursor: pointer; font-weight: 600; font-size: 1.02rem; box-shadow: 0 10px 28px #0005; transition: transform .2s, background .2s, box-shadow .2s; }
+    .intro-btn:hover { transform: translateY(-2px); background: #f2d18c; box-shadow: 0 14px 32px #0006; }
+    .intro-btn:active { transform: scale(.96); }
+    .intro-note { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #25180d22; font-size: 1.1rem; animation: notePulse 1.6s ease-in-out infinite; }
+    @keyframes notePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.18); } }
+    .intro-hint { margin: 1.6rem 0 0; color: var(--muted); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; }
+    .intro-done #introScreen { opacity: 0; transform: scale(.96); visibility: hidden; pointer-events: none; }
     .next:focus-visible, .music-toggle:focus-visible, .back:focus-visible { outline: 2px solid white; outline-offset: 3px; }
 
     /* Lá thư */
     #letterScreen { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; padding: clamp(1rem, 4vw, 3rem); overflow: auto; opacity: 0; visibility: hidden; background: linear-gradient(135deg, #c8a66e, #816044); transition: opacity 1.15s ease, visibility 0s linear 1.15s; }
     #letterScreen::before { content: ""; position: fixed; inset: 0; opacity: .28; pointer-events: none; background-image: radial-gradient(#503b2b .65px, transparent .75px); background-size: 5px 5px; }
-    .letter { width: min(750px, 100%); position: relative; margin: auto; padding: clamp(2rem, 7vw, 5rem); color: var(--ink); background: var(--cream); box-shadow: 0 28px 70px #2b1d14aa; transform: translateY(45px) rotateX(7deg); opacity: 0; transition: transform 1.1s cubic-bezier(.2,.8,.2,1) .25s, opacity .8s ease .25s; }
+    .letter { width: min(750px, 100%); position: relative; margin: auto; max-height: calc(100svh - 2 * clamp(1rem, 4vw, 3rem)); overflow-y: auto; padding: clamp(1.6rem, 5vw, 3.2rem); color: var(--ink); background: var(--cream); box-shadow: 0 28px 70px #2b1d14aa; transform: translateY(45px) rotateX(7deg); opacity: 0; transition: transform 1.1s cubic-bezier(.2,.8,.2,1) .25s, opacity .8s ease .25s; }
     .letter::before { content:""; position:absolute; inset: 12px; border: 1px solid #b99051aa; pointer-events:none; }
     .letter > * { position: relative; }
-    .letter-date { margin: 0 0 1.8rem; color: #8e6b3a; font-size: .75rem; letter-spacing: .16em; text-transform: uppercase; }
-    .letter h2 { margin: 0 0 1rem; font: 500 clamp(2.5rem, 6vw, 4.5rem)/1 "Great Vibes", cursive; color: #88612e; }
-    #letterText { min-height: 260px; white-space: pre-wrap; font: 500 clamp(1.03rem, 2.4vw, 1.25rem)/1.9 "Playfair Display", serif; }
-    .signature { margin: 2rem 0 0; color: #806039; text-align: right; font: 500 2.2rem/1 "Great Vibes", cursive; }
+    .letter-date { margin: 0 0 1.2rem; color: #8e6b3a; font-size: .75rem; letter-spacing: .16em; text-transform: uppercase; }
+    .letter h2 { margin: 0 0 .9rem; font: 500 clamp(2.2rem, 5vw, 3.6rem)/1 "Great Vibes", cursive; color: #88612e; }
+    @media (max-height: 620px) { .letter h2 { font-size: clamp(1.8rem, 7vh, 2.6rem); margin-bottom: .6rem; } .letter-date { margin-bottom: 1rem; } .signature { margin-top: 1.1rem; font-size: 1.7rem; } }
+    #letterText { min-height: 0; white-space: pre-wrap; font: 500 clamp(1rem, 2.2vw, 1.14rem)/1.78 "Playfair Display", serif; }
+    /* Thư fit màn hình: chữ co theo chiều cao — màn thấp thì chữ nhỏ lại, hết cảnh kéo lên kéo xuống */
+    @media (min-height: 0px) { #letterText { font-size: clamp(.9rem, min(2.2vw, 2vh), 1.05rem); } }
+    @media (max-height: 620px) { #letterText { font-size: .88rem; line-height: 1.62; } }
+    @media (max-height: 520px) { #letterText { font-size: .82rem; line-height: 1.55; } }
+    .signature { margin: 1.4rem 0 0; color: #806039; text-align: right; font: 500 2rem/1 "Great Vibes", cursive; }
     .back { position: absolute; top: 1rem; right: 1rem; border: 0; color: #806039; background: transparent; cursor: pointer; font-size: .8rem; }
-    .opened #musicScreen { opacity: 0; transform: scale(1.06); pointer-events: none; }
+    /* Thanh cuộn trong tờ thư: mảnh, mờ, gợn màu giấy */
+    .letter::-webkit-scrollbar { width: 5px; }
+    .letter::-webkit-scrollbar-thumb { background: #b9905166; border-radius: 99px; }
+    .letter::-webkit-scrollbar-track { background: transparent; }
+    .opened #musicScreen { opacity: 0; transform: scale(.96); pointer-events: none; }
     .opened #letterScreen { opacity: 1; visibility: visible; transition-delay: 0s; }
     .opened .letter { opacity: 1; transform: translateY(0) rotateX(0); }
     @keyframes spin { to { transform: rotate(360deg); } }
     @media (max-width: 720px) { .music-layout { grid-template-columns: 1fr; gap: 1.1rem; padding: 1.5rem 0 5rem; } .record-caption { margin-top: .85rem; } .words { min-height: 0; padding: 1.3rem 0 0; border-left: 0; border-top: 1px solid #ddb86d99; text-align: center; } .track-progress { margin: 1.1rem auto 0; } .controls { left: 1rem; right: 1rem; justify-content: space-between; } }
+    /* Điện thoại dọc: nén thư tối đa — bớt cuộn, chữ vẫn đọc được */
+    @media (max-width: 720px) {
+      .letter { padding: 2.6rem 1.15rem 1.7rem; }
+      .letter-date { margin: 0 0 .8rem; font-size: .66rem; }
+      .letter h2 { font-size: 2rem; margin-bottom: .6rem; }
+      #letterText { font-size: .84rem; line-height: 1.72; }
+      .signature { margin-top: .9rem; font-size: 1.55rem; }
+      .back { top: .55rem; right: .7rem; }
+    }
     /* Màn dọc nhưng LÙN (điện thoại nhỏ/cửa sổ thấp): thu đĩa + chữ để
      * hàng nút luôn nằm gọn trong màn hình — không bị cắt mất nút */
     @media (max-width: 720px) and (max-height: 700px) {
+      .letter { max-height: calc(100svh - 2 * clamp(1rem, 4vw, 3rem) - 1.6rem); }
       .music-layout { gap: .6rem; padding: .8rem 0 4.6rem; }
       .vinyl { width: min(230px, 36vh); }
       .record-glow { width: 60%; }
@@ -74,6 +109,14 @@
       .next { padding: .6rem 1.05rem; }
       .letter { padding: 1.6rem 1.4rem; }
       #letterText { min-height: 0; }
+    }
+    /* Điện thoại dọc nhưng LÙN (<=700px cao): siết thư thêm một nấc cho vừa */
+    @media (max-width: 720px) and (max-height: 700px) {
+      .letter { padding: 2.4rem 1.05rem 1.4rem; }
+      .letter h2 { font-size: 1.8rem; margin-bottom: .45rem; }
+      #letterText { font-size: .8rem; line-height: 1.62; }
+      .signature { margin-top: .7rem; font-size: 1.4rem; }
+      .letter-date { margin-bottom: .6rem; }
     }
     /* Điện thoại XOAY NGANG: gọn lá thư + màn đĩa cho vừa chiều cao */
     @media (orientation: landscape) and (max-height: 520px) {
@@ -118,6 +161,14 @@
     <audio id="bgMusic" loop preload="metadata"><source src="nhac.mp3" type="audio/mpeg" /></audio>
   </main>
 
+  <section id="introScreen" aria-label="Màn mở đầu">
+    <div class="intro-box">
+      <p class="intro-msg">Chúc em anniversary vui vẻ nhé <span class="intro-heart">♥</span></p>
+      <button class="intro-btn" id="introBtn" type="button"><span class="intro-note">♫</span> Mở nhạc</button>
+      <p class="intro-hint">Chạm để mở kỷ niệm bốn năm</p>
+    </div>
+  </section>
+
   <section id="letterScreen" class="screen" aria-hidden="true" aria-label="Bức thư tình">
     <article class="letter">
       <button class="back" id="backButton" type="button">← Xem lại đĩa than</button>
@@ -132,21 +183,40 @@
     // Mỗi câu có mốc bắt đầu tính bằng giây. Trang sẽ bám theo thời gian
     // thực của nhac.mp3, không còn đổi lời theo một khoảng cố định nữa.
     // Nếu bản nhạc của bạn có đoạn dạo khác, chỉ cần sửa số sau "at".
+    // Mỗi câu có mốc bắt đầu tính bằng giây, neo đúng LÚC GIỌNG CẤT LỜI
+    // (phân tích onset giọng từ file nhac.mp3 thật - không đặt chữ sớm trước giọng).
     const syncedLyrics = [
-      { at: 0, text: "Bốn năm trôi qua..." },
-      { at: 9, text: "Ta vẫn bên nhau" },
-      { at: 17, text: "Không còn vội vã" },
-      { at: 25, text: "Như những ngày đầu" },
-      { at: 34, text: "Anh nhìn em cười và rồi lại nói" },
-      { at: 43, text: "Ta đã quen nhau như những ngày đầu" },
-      { at: 52, text: "Vẫn là người ấy, vẫn là bàn tay" },
-      { at: 61, text: "Nắm thật chặt lấy dẫu đời đổi thay" },
-      { at: 70, text: "Đi từng đoạn ngắn hóa thành đường dài" },
-      { at: 79, text: "Bước chậm cùng nhau chẳng cần đến ai" },
-      { at: 89, text: "Vẫn là ánh mắt, vẫn là môi quen" },
-      { at: 99, text: "Vẫn gọi tên nhau giữa bao ngàn xem" },
-      { at: 109, text: "Bao lần ngã xuống ngẩng đầu nhìn nhau" },
-      { at: 119, text: "Mình lại yêu thêm... như những ngày đầu." }
+      { at: 14.8, text: "Bốn năm trôi qua" },
+      { at: 17.0, text: "Ta vẫn bên nhau" },
+      { at: 18.5, text: "Không còn vội vàng như những ngày đầu" },
+      { at: 21.7, text: "Anh nhìn em cười và rồi lại nói" },
+      { at: 24.5, text: "Ta đã quen nhau như những ngày đầu" },
+      { at: 30.9, text: "Vẫn là người ấy" },
+      { at: 32.9, text: "Vẫn là bàn tay" },
+      { at: 34.1, text: "Nắm thật chặt lấy" },
+      { at: 35.7, text: "Dẫu đời đổi thay (hey)" },
+      { at: 38.3, text: "Đi từng đoạn ngắn" },
+      { at: 40.0, text: "Hóa thành đường dài" },
+      { at: 44.3, text: "Bước chậm cùng nhau" },
+      { at: 46.6, text: "Chẳng cần đến ai" },
+      { at: 48.9, text: "Vẫn là ánh mắt" },
+      { at: 50.5, text: "Vẫn là môi quen" },
+      { at: 52.1, text: "Vẫn gọi tên nhau giữa bao ngàn xem" },
+      { at: 55.0, text: "Bao lần ngã xuống" },
+      { at: 56.9, text: "Ngẩng đầu nhìn nhau" },
+      { at: 58.9, text: "Mình lại yêu thêm như những ngày đầu (oh-oh)" },
+      { at: 62.5, text: "Vẫn là người ấy" },
+      { at: 64.3, text: "Vẫn là bàn tay" },
+      { at: 65.7, text: "Nắm thật chặt lấy" },
+      { at: 67.4, text: "Dẫu đời đổi thay (hey)" },
+      { at: 70.1, text: "Đi từng đoạn ngắn" },
+      { at: 71.7, text: "Hóa thành đường dài" },
+      { at: 76.3, text: "Bước chậm cùng nhau" },
+      { at: 78.3, text: "Chẳng cần đến ai" },
+      { at: 83.5, text: "Bao lần ngã xuống" },
+      { at: 85.8, text: "Ngẩng đầu nhìn nhau" },
+      { at: 90.8, text: "Mình lại yêu thêm như những ngày đầu (oh-oh)" },
+      { at: 94.0, text: "♪ ..." }
     ];
     const letter = `Thấm thoắt mà chúng mình đã đi cùng nhau bốn năm rồi.
 
@@ -170,13 +240,13 @@ Yêu em hôm nay, và cả những ngày sau nữa.`;
       activeLyricIndex = index;
       lyricLine.classList.add('changing');
       setTimeout(() => {
-        lyricLine.textContent = syncedLyrics[index].text;
+        lyricLine.textContent = index >= 0 ? syncedLyrics[index].text : "♪ ...";
         lyricLine.classList.remove('changing');
-      }, 220);
+      }, 140);
     }
     function syncLyrics() {
       const time = audio.currentTime;
-      let index = 0;
+      let index = -1;
       for (let i = 0; i < syncedLyrics.length; i++) {
         if (syncedLyrics[i].at <= time) index = i;
         else break;
@@ -213,23 +283,26 @@ Yêu em hôm nay, và cả những ngày sau nữa.`;
     musicToggle.addEventListener('click', toggleMusic);
 
     // Trình duyệt chỉ cho phép phát âm thanh sau thao tác của người xem.
-    // Vì vậy, chỉ cần bấm/chạm bất kỳ chỗ nào trên trang là nhạc sẽ tự bắt đầu.
-    document.addEventListener('pointerdown', (event) => {
-      // Để lần bấm đầu tiên vào nút nhạc vẫn chỉ thực hiện đúng một hành động.
-      if (!event.target.closest('#musicToggle')) playMusic();
-    }, { once: true });
+    // Màn mở đầu chính là thao tác đó: bấm lời chúc / nút Mở nhạc là nhạc vang ngay.
+    const introScreen = document.querySelector('#introScreen');
+    function openFromIntro() {
+      playMusic();
+      document.body.classList.add('intro-done');
+    }
+    introScreen.addEventListener('click', openFromIntro, { once: true });
 
+    /* Nhớ vị trí gõ: đóng thư giữa chừng rồi mở lại sẽ gõ tiếp từ chỗ dừng;
+     * gõ xong rồi thì lần mở sau hiện nguyên lá thư luôn, không typing lại. */
+    let typePos = 0;
     function typeLetter() {
       const target = document.querySelector('#letterText');
-      target.textContent = '';
-      let i = 0;
       clearTimeout(typingTimer);
-      (function type() { if (i < letter.length) { target.textContent += letter[i++]; typingTimer = setTimeout(type, 18); } })();
+      if (typePos >= letter.length) { target.textContent = letter; return; }
+      (function type() { if (typePos < letter.length) { target.textContent = letter.slice(0, ++typePos); typingTimer = setTimeout(type, 18); } })();
     }
     function openLetter() {
       document.body.classList.add('opened');
       document.querySelector('#letterScreen').setAttribute('aria-hidden', 'false');
-      audio.volume = .2;
       setTimeout(typeLetter, 900);
     }
     function closeLetter() {
