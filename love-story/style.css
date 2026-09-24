@@ -156,12 +156,15 @@ button { color: inherit; }
   .heart-collage { top: 8%; right: auto; left: 50%; width: min(78vw, 380px); height: min(42vh, 390px); transform: translateX(-50%); }
   .heart-photo { width: clamp(48px, 13vw, 72px); }
   .scene--final .scene__copy { bottom: 69px; left: 50%; width: calc(100vw - 52px); transform: translateX(-50%); text-align: center; }
-  .scene--final .scene__title { font-size: clamp(30px, 9.5vw, 49px); }
-  .scene--final .scene__text { margin-inline: auto; }
+  /* Chữ scene cuối nhỏ lại một chút (trước 30–49px) để bó ảnh tim được PHÓNG TO */
+  .scene--final .scene__title { font-size: clamp(26px, 7.8vw, 40px); }
+  .scene--final .scene__text { margin-inline: auto; font-size: 19px; }
   /* Scene cuối: chữ "BỐN NĂM RỒI..." to hơn + co bó ảnh trái tim lại để dòng
      chữ không đè lên tấm polaroid đuôi tim */
-  .scene--final .scene__eyebrow { font-size: 14px; margin: 0 0 16px; }
-  .scene--final .heart-collage { height: min(34vh, 320px); }
+  .scene--final .scene__eyebrow { font-size: 13px; margin: 0 0 14px; }
+  /* PHÓNG TO bó ảnh trái tim: chiếm ~88vw, cao đến 44vh */
+  .scene--final .heart-collage { width: min(88vw, 420px); height: min(44vh, 400px); }
+  .scene--final .heart-photo { width: clamp(56px, 15.5vw, 84px); }
 }
 
 /* Màn lùn (cửa sổ thấp / điện thoại ngang): co trái tim + chữ scene cuối
