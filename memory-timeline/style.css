@@ -520,6 +520,13 @@ body.music-playing .music-toggle .bars { display: flex; }
    Caption (tiêu đề + mô tả) tràn hết bề ngang nên nút dưới-phải luôn ĐÈ LÊN CHỮ.
    Đưa nút lên góc trên-phải — cạnh khoảng trống của dòng năm — để không bao giờ chồng chữ. */
 @media (max-width: 699px) {
+  /* Ảnh co lại vừa slot khi caption dài — thanh thời gian dưới đáy
+     KHÔNG BAO GIỜ đè lên chữ (trước đây ảnh khoá cứng 67vh làm tràn xuống bar). */
+  .page-inner { padding-bottom: calc(var(--bottom-bar-h) + 16px); }
+  .photo,
+  .page--gilded .photo { flex-shrink: 1; min-height: 0; }
+  .photo.fit { flex: 0 1 auto; }
+  .page--keepsake .photo { flex-shrink: 1; }
   .music-toggle {
     top: calc(var(--frame) + 4px + env(safe-area-inset-top, 0px));
     bottom: auto;
