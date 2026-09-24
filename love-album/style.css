@@ -295,8 +295,9 @@ body {
 .album-page.is-active .ending-line--2 { animation-delay: 6.5s; }
 .album-page.is-active .ending-line--3 { animation-delay: 9.4s; }
 @keyframes endingLine {
-  from { opacity: 0; transform: translateY(12px); filter: blur(4px); }
-  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+  /* Bỏ filter blur: trên điện thoại chữ hay bị kẹt mờ / chụp màn hình dính vệt nhòe */
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ---------- Chuyển trang (8 kiểu) ---------- */
@@ -464,6 +465,7 @@ body {
     padding-top: 26px;
     margin-top: -26px;
   }
+  .ending-copy .page-kicker { font-size: 0.88rem; letter-spacing: 0.26em; }
   .ending-copy .page-title { font-size: clamp(.98rem, 3.8vw, 1.22rem); }
   .ending-copy .page-text { font-size: clamp(.9rem, 3.7vw, 1.04rem); margin-top: 0.4em; }
   .album-page--quiet .page-half { padding: 10% 8%; }

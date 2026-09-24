@@ -113,12 +113,25 @@ async function playStory() {
   try { await audio.play(); } catch (error) { console.warn('Audio needs a user gesture to play.', error); }
 }
 
-startButton.addEventListener('click', () => { audio.currentTime = 0; showScene(0, true); playStory(); });
+startButton.addEventListener('click', () => { audio.currentTime = 0; showScene(0, true); window.__userPausedMusic = false; playStory(); });
 
 audio.addEventListener('loadedmetadata', updatePlayer);
 audio.addEventListener('timeupdate', updatePlayer);
-audio.addEventListener('play', () => film.classList.remove('is-paused'));
-audio.addEventListener('pause', () => film.classList.add('is-paused'));
+audio.addEventListener('play', () => { film.classList.remove('is-paused'); window.__userPausedMusic = false; });
+audio.addEventListener('pause', () => { film.classList.add('is-paused'); });
 audio.addEventListener('ended', () => { film.classList.add('is-paused'); showScene(scenes.length - 1); });
+
+/* Rời tab / tắt màn hình: điện thoại tự pause nhạc — không phải người dùng dừng.
+   Quay lại tab (hoặc bấm Back về) thì tự phát tiếp, bộ phim chạy tiếp như cũ. */
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && hasStarted && audio.paused && !audio.ended && !window.__userPausedMusic) {
+    audio.play().catch(() => {});
+  }
+  updatePlayer();
+});
+window.addEventListener('pageshow', () => {
+  if (hasStarted && audio.paused && !audio.ended && !window.__userPausedMusic) audio.play().catch(() => {});
+  updatePlayer();
+});
 
 updatePlayer();

@@ -59,7 +59,9 @@ button { color: inherit; }
 
 .scene--polaroid .photo-frame { left: min(71vw, calc(50% + 250px)); width: min(32vw, 450px); height: min(68vh, 650px); padding: 15px 15px 73px; background: #f3e9df; transform: translate(-50%, -50%) rotate(-2.2deg); box-shadow: 22px 35px 75px rgba(0,0,0,.42); }
 .scene--polaroid .photo-frame::after { content: "for keeps"; position: absolute; right: 22px; bottom: 23px; color: #806358; font-family: "Cormorant Garamond", Georgia, serif; font-size: 24px; font-style: italic; }
-.scene--polaroid .photo-frame img { height: calc(100% - 58px); }
+/* Ảnh lấp đầy ô trắng của polaroid (trước đây trừ đi 58px nên ảnh bé tí,
+   thừa một dải kem lớn dưới ảnh). "for keeps" vẫn nằm trong lề đáy 73px. */
+.scene--polaroid .photo-frame img { height: 100%; }
 .scene--polaroid .tape { position: absolute; z-index: 3; top: calc(50% - min(34vh, 345px)); left: min(55vw, calc(50% + 70px)); width: 120px; height: 29px; background: rgba(219,192,163,.68); transform: rotate(-7deg); }
 .scene--polaroid .scene__copy { bottom: 19vh; }
 
@@ -138,18 +140,26 @@ button { color: inherit; }
   .scene--text .scene__copy { left: 0; max-width: none; padding: 32px 28px 96px; }
   .scene--text-dark .scene__copy { padding: 32px 28px 64px; }
   .scene--text .scene__title { font-size: clamp(42px, 13vw, 72px); }
-  .scene--polaroid .photo-frame { width: min(66vw, 360px); height: min(42vh, 390px); top: 31%; }
-  .scene--polaroid .tape { top: calc(31% - min(23.5vh, 220px)); left: calc(50% - min(37vw, 230px)); }
+  /* Polaroid trên điện thoại: khung to hơn + lề dưới mỏng hơn (73px → 58px)
+     nên ảnh trong ô trắng to ra rõ rệt mà khung vẫn không đụng dòng chữ bên dưới. */
+  .scene--polaroid .photo-frame { width: min(70vw, 400px); height: min(45vh, 430px); top: 30.5%; padding: 15px 15px 58px; }
+  .scene--polaroid .tape { top: calc(30.5% - min(23.5vh, 220px)); left: calc(50% - min(37vw, 230px)); }
   .scene--polaroid .scene__copy { bottom: 40px; }
-  .scene--montage .photo-frame { top: 26%; width: 42vw; height: 30vh; transform: translate(calc(-50% - 19vw), -50%) rotate(-4deg); }
-  .scene--montage .photo-frame--second { top: 28%; transform: translate(calc(-50% + 19vw), -47%) rotate(4deg); }
-  .scene--montage .scene__copy { bottom: 64px; width: calc(100vw - 56px); }
+  /* 2 khúc montage trên điện thoại: nhấc cả ảnh lẫn chữ lên cho khối chữ ra
+     giữa màn hình (trước đây chữ dính sát đáy). Ảnh lùi lên 22%, chữ cách đáy 18vh. */
+  .scene--montage .photo-frame { top: 22%; width: 42vw; height: 28vh; transform: translate(calc(-50% - 19vw), -50%) rotate(-4deg); }
+  .scene--montage .photo-frame--second { top: 24%; transform: translate(calc(-50% + 19vw), -47%) rotate(4deg); }
+  .scene--montage .scene__copy { bottom: 18vh; width: calc(100vw - 56px); }
   .scene--montage .scene__title { font-size: clamp(31px, 10vw, 48px); }
   .heart-collage { top: 8%; right: auto; left: 50%; width: min(78vw, 380px); height: min(42vh, 390px); transform: translateX(-50%); }
   .heart-photo { width: clamp(48px, 13vw, 72px); }
   .scene--final .scene__copy { bottom: 69px; left: 50%; width: calc(100vw - 52px); transform: translateX(-50%); text-align: center; }
   .scene--final .scene__title { font-size: clamp(30px, 9.5vw, 49px); }
   .scene--final .scene__text { margin-inline: auto; }
+  /* Scene cuối: chữ "BỐN NĂM RỒI..." to hơn + co bó ảnh trái tim lại để dòng
+     chữ không đè lên tấm polaroid đuôi tim */
+  .scene--final .scene__eyebrow { font-size: 14px; margin: 0 0 16px; }
+  .scene--final .heart-collage { height: min(34vh, 320px); }
 }
 
 /* Màn lùn (cửa sổ thấp / điện thoại ngang): co trái tim + chữ scene cuối
@@ -157,6 +167,7 @@ button { color: inherit; }
 @media (max-width: 700px) and (max-height: 640px) {
   .heart-collage { height: min(36vh, 330px); }
   .scene--final .scene__title { font-size: clamp(28px, 8.4vw, 44px); }
+  .scene--montage .scene__copy { bottom: 72px; }
   .photo-frame { height: min(40vh, 360px); top: 28%; }
   .scene--polaroid .photo-frame { height: min(38vh, 340px); }
   .scene__title { font-size: clamp(34px, 10.5vw, 46px); }

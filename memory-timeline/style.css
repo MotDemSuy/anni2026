@@ -516,8 +516,21 @@ body.music-playing .music-toggle .bars { display: flex; }
   .page-inner { max-width: 620px; }
   .photo { border-radius: 22px; }
 }
+/* Điện thoại: KHÔNG neo nút nhạc ở góc dưới-phải nữa.
+   Caption (tiêu đề + mô tả) tràn hết bề ngang nên nút dưới-phải luôn ĐÈ LÊN CHỮ.
+   Đưa nút lên góc trên-phải — cạnh khoảng trống của dòng năm — để không bao giờ chồng chữ. */
 @media (max-width: 699px) {
-  .music-toggle { top: auto; bottom: calc(var(--bottom-bar-h) + 12px); right: calc(var(--frame) + 18px); }
+  .music-toggle {
+    top: calc(var(--frame) + 4px + env(safe-area-inset-top, 0px));
+    bottom: auto;
+    right: calc(var(--frame) + 6px);
+    width: 40px; height: 40px;
+  }
+  /* Dòng năm chừa chỗ cho nút ở góc phải (nếu năm dài / màn rất hẹp) */
+  .kicker { padding-right: 46px; }
+  .page--gilded .kicker,
+  .page--lyric .kicker,
+  .page--keepsake .kicker { padding-right: 0; }
 }
 @media (max-height: 620px) {
   .year { font-size: clamp(2rem, 8vh, 2.6rem); }

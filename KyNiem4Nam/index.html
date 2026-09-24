@@ -259,6 +259,20 @@ Yêu em hôm nay, và cả những ngày sau nữa.`;
     audio.addEventListener('loadedmetadata', syncLyrics);
     syncLyrics();
 
+    /* Rời tab / tắt màn hình: điện thoại tự pause nhạc (tiết kiệm pin) —
+       đó KHÔNG phải người dùng bấm dừng. Quay lại tab thì tự phát tiếp
+       như cũ, đĩa than và lời bài hát tiếp tục chạy. */
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        if (audio.paused && !window.__userPausedMusic && document.body.classList.contains('intro-done')) playMusic();
+        syncLyrics();
+      }
+    });
+    window.addEventListener('pageshow', () => {
+      if (audio.paused && !window.__userPausedMusic && document.body.classList.contains('intro-done')) playMusic();
+      syncLyrics();
+    });
+
     async function playMusic() {
       try {
         await audio.play();
@@ -272,9 +286,10 @@ Yêu em hôm nay, và cả những ngày sau nữa.`;
       }
     }
     async function toggleMusic() {
-      if (audio.paused) await playMusic();
+      if (audio.paused) { window.__userPausedMusic = false; await playMusic(); }
       else {
         audio.pause();
+        window.__userPausedMusic = true; // người dùng chủ ý tắt — không tự bật lại hộ
         musicToggle.textContent = '♬ Bật nhạc';
         musicToggle.setAttribute('aria-pressed', 'false');
         vinyl.classList.add('is-paused');

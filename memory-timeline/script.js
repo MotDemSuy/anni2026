@@ -371,8 +371,10 @@ function updateProgressUI() {
 musicToggle.addEventListener("click", () => {
   if (!audio) setupAudio();
   if (audio.paused) {
+    window.__userPausedMusic = false;
     playMusic();
   } else {
+    window.__userPausedMusic = true; // người dùng chủ ý tắt — không tự bật lại hộ
     audio.pause();
   }
 });
@@ -395,6 +397,20 @@ document.addEventListener("keydown", (e) => {
     startExperience();
   }
 }, { once: true });
+
+/* Rời tab / tắt màn hình: điện thoại tự pause nhạc — không phải người dùng dừng.
+   Nhưng nếu người dùng ĐANG chủ ý tắt nhạc (đã pause trước đó) thì tôn trọng,
+   không tự bật lại. Quay lại tab album chạy tiếp như cũ. */
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && started) {
+    if (audio && audio.paused && !audio.ended && !window.__userPausedMusic) playMusic();
+    syncPageToAudio();
+  }
+});
+window.addEventListener("pageshow", () => {
+  if (started && audio && audio.paused && !audio.ended && !window.__userPausedMusic) playMusic();
+  syncPageToAudio();
+});
 
 /* ============================================================
    9) INIT

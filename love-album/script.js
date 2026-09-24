@@ -81,5 +81,23 @@ async function begin() {
 // Prepare every asset while the cover is open; no interaction is required afterward.
 scenes.flatMap(scene => scene.images || (scene.image ? [scene.image] : [])).forEach(source => { const image = new Image(); image.src = source; });
 startButton.addEventListener('click', begin);
-music.addEventListener('play', () => { if (started) requestAnimationFrame(update); });
+music.addEventListener('play', () => { if (started) { window.__userPausedMusic = false; requestAnimationFrame(update); } });
 music.addEventListener('ended', () => showPage(scenes.length - 1));
+/* Người dùng bấm nút bật/tắt nhạc trên bìa (nếu có) hoặc hệ thống pause: đánh dấu chủ ý */
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('#musicToggle');
+  if (btn && !music.paused) window.__userPausedMusic = true;
+}, true);
+
+/* Rời tab / tắt màn hình: điện thoại tự pause nhạc — không phải người dùng dừng.
+   Quay lại tab (hoặc bấm Back về) thì tự phát tiếp, cuốn sách lật trang tiếp như cũ. */
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && started && music.paused && !music.ended && !window.__userPausedMusic) {
+    music.play().catch(() => {});
+  }
+  if (started) requestAnimationFrame(update);
+});
+window.addEventListener('pageshow', () => {
+  if (started && music.paused && !music.ended && !window.__userPausedMusic) music.play().catch(() => {});
+  if (started) requestAnimationFrame(update);
+});
