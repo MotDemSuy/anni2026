@@ -177,7 +177,11 @@
     let cdTimer=null;function startCountdown(iso){stopCountdown();const target=new Date(iso).getTime(),elD=document.getElementById('cdD');if(!elD)return;const tick=()=>{const t=Math.max(0,target-Date.now());elD.textContent=Math.floor(t/864e5);document.getElementById('cdH').textContent=String(Math.floor(t%864e5/36e5)).padStart(2,'0');document.getElementById('cdM').textContent=String(Math.floor(t%36e5/6e4)).padStart(2,'0');document.getElementById('cdS').textContent=String(Math.floor(t%6e4/1e3)).padStart(2,'0')};tick();cdTimer=setInterval(tick,1e3)}function stopCountdown(){clearInterval(cdTimer);cdTimer=null}
     function backToCollection(){giftView.classList.add('fade-away');setTimeout(()=>{giftView.classList.remove('fade-away');doBackToCollection()},280)}
     function doBackToCollection(){stopCountdown();stopTyping();giftView.className='gift-view';giftView.innerHTML='';collection.style.display='block';if(openedGiftIndex===unlocked&&unlocked< GIFTS.length-1)unlocked++;renderCards();document.getElementById('cardHint').textContent=unlocked===GIFTS.length-1?'Tất cả món quà đã được mở khóa ♡':`Món quà thứ ${unlocked+1} đã sáng lên. Chạm để mở nhé.`;stopMusic();if(lobbyWantsMusic)startLobbyMusic();window.scrollTo({top:0,behavior:'smooth'})}
-    function openGiftBox(){const overlay=document.getElementById('giftOverlay');if(overlay.classList.contains('hidden'))return;overlay.classList.add('opening');try{sessionStorage.setItem('giftBoxOpened','1')}catch(e){}setTimeout(()=>overlay.classList.add('hidden'),600)}
+    function openGiftBox(){const overlay=document.getElementById('giftOverlay');if(overlay.classList.contains('hidden'))return;overlay.classList.add('opening');try{sessionStorage.setItem('giftBoxOpened','1')}catch(e){}
+      /* Chạm mở hộp quà = thao tác đầu tiên của người xem → trình duyệt CHO PHÉP
+         phát nhạc từ đây. Tự bật nhạc nền tủ quà ngay, không cần bấm nút ♫. */
+      startLobbyMusic();
+      setTimeout(()=>overlay.classList.add('hidden'),600)}
     function note(freq,duration,time){const oscillator=audioContext.createOscillator(),gain=audioContext.createGain();oscillator.type='sine';oscillator.frequency.value=freq;gain.gain.setValueAtTime(.0001,time);gain.gain.exponentialRampToValueAtTime(.07,time+.04);gain.gain.exponentialRampToValueAtTime(.0001,time+duration);oscillator.connect(gain).connect(audioContext.destination);oscillator.start(time);oscillator.stop(time+duration+.03)}
     function playPhrase(){if(!musicOn||!audioContext)return;const now=audioContext.currentTime+.05;currentMelody.forEach((freq,i)=>note(freq,.5,now+i*.52));musicTimer=setTimeout(playPhrase,currentMelody.length*520+220)}
     /* Nhạc nền cho MÀN CHỌN 4 MÓN QUÀ: dùng file nhac.mp3, loop nhẹ. */
@@ -203,6 +207,9 @@
     // Đã mở hộp quà trong phiên này rồi (bấm Back về / F5): vào thẳng màn
     // chọn quà, không bắt chạm hộp quà lại từ đầu.
     try{if(sessionStorage.getItem('giftBoxOpened')==='1'){const ov=document.getElementById('giftOverlay');ov.style.transition='none';ov.classList.add('hidden');}}catch(e){}
+    /* Lưu ý: khi quay lại trang bằng Back/F5 (đã mở hộp quà trong phiên này),
+       trình duyệt KHÔNG cho phát nhạc tự động nếu chưa có thao tác chạm — đây là
+       giới hạn của trình duyệt, không phải lỗi. Bấm ♫ một lần là nhạc chạy lại. */
     /* ----- Vòng quay may mắn: bấm món quà 3 — trúng số nào mở album đó.
        8 ô (12.5%/ô), ô đối xứng cùng màu cùng số → mỗi số vẫn 25%.
        Mỗi lần mở trang quay được một lần, làm mới trang để quay lại. ----- */
