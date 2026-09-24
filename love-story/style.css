@@ -33,7 +33,9 @@ button { color: inherit; }
 
 .scene__background { position: absolute; inset: -4%; background-image: var(--image); background-size: cover; background-position: center; filter: blur(20px) brightness(.42) saturate(.72); transform: scale(1.07); }
 .scene__wash { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(20,17,15,.72), rgba(20,17,15,.11) 58%, rgba(20,17,15,.46)), linear-gradient(0deg, rgba(16,13,12,.45), transparent 45%); }
-.photo-frame { position: absolute; left: 50%; top: 50%; width: min(34vw, 480px); height: min(72vh, 660px); transform: translate(-50%, -50%); overflow: hidden; background: #302823; box-shadow: 0 32px 90px rgba(0,0,0,.4); }
+/* margin:0 — figure mặc định có margin 40px hai bên của trình duyệt,
+   làm cặp ảnh montage lệch phải 40px trên mobile */
+.photo-frame { position: absolute; left: 50%; top: 50%; width: min(34vw, 480px); height: min(72vh, 660px); margin: 0; transform: translate(-50%, -50%); overflow: hidden; background: #302823; box-shadow: 0 32px 90px rgba(0,0,0,.4); }
 .photo-frame img { width: 100%; height: 100%; object-fit: contain; animation: slowZoom 26s ease-in-out infinite alternate; }
 .scene--photo .photo-frame { left: min(71vw, calc(50% + 250px)); }
 .scene.is-paused .photo-frame img, .film.is-paused * { animation-play-state: paused !important; }
@@ -145,8 +147,8 @@ button { color: inherit; }
   .scene--polaroid .photo-frame { width: min(70vw, 400px); height: min(45vh, 430px); top: 30.5%; padding: 15px 15px 58px; }
   .scene--polaroid .tape { top: calc(30.5% - min(23.5vh, 220px)); left: calc(50% - min(37vw, 230px)); }
   .scene--polaroid .scene__copy { bottom: 40px; }
-  /* 2 khúc montage trên điện thoại: nhấc cả ảnh lẫn chữ lên cho khối chữ ra
-     giữa màn hình (trước đây chữ dính sát đáy). Ảnh lùi lên 22%, chữ cách đáy 18vh. */
+  /* 2 khúc montage trên điện thoại: cặp ảnh RA GIỮA màn hình (margin figure
+     đã reset ở .photo-frame), nhấc lên 22% + chữ cách đáy 18vh. */
   .scene--montage .photo-frame { top: 22%; width: 42vw; height: 28vh; transform: translate(calc(-50% - 19vw), -50%) rotate(-4deg); }
   .scene--montage .photo-frame--second { top: 24%; transform: translate(calc(-50% + 19vw), -47%) rotate(4deg); }
   .scene--montage .scene__copy { bottom: 18vh; width: calc(100vw - 56px); }
