@@ -105,6 +105,18 @@ function updatePlayer() {
   if (nextIndex !== activeIndex) showScene(nextIndex);
 }
 
+/* Giữ màn hình luôn sáng khi album đang chạy (Wake Lock API).
+   Mất khoá khi rời tab → tự xin lại khi quay lại. Máy không hỗ trợ thì bỏ qua. */
+let wakeLock = null;
+async function keepScreenAwake() {
+  try {
+    if ('wakeLock' in navigator && !wakeLock) {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', () => { wakeLock = null; });
+    }
+  } catch (e) { /* không hỗ trợ / bị chặn — im lặng */ }
+}
+
 async function playStory() {
   if (!hasStarted) {
     hasStarted = true;
@@ -113,7 +125,7 @@ async function playStory() {
   try { await audio.play(); } catch (error) { console.warn('Audio needs a user gesture to play.', error); }
 }
 
-startButton.addEventListener('click', () => { audio.currentTime = 0; showScene(0, true); window.__userPausedMusic = false; playStory(); });
+startButton.addEventListener('click', () => { audio.currentTime = 0; showScene(0, true); window.__userPausedMusic = false; keepScreenAwake(); playStory(); });
 
 audio.addEventListener('loadedmetadata', updatePlayer);
 audio.addEventListener('timeupdate', updatePlayer);
@@ -124,8 +136,11 @@ audio.addEventListener('ended', () => { film.classList.add('is-paused'); showSce
 /* Rời tab / tắt màn hình: điện thoại tự pause nhạc — không phải người dùng dừng.
    Quay lại tab (hoặc bấm Back về) thì tự phát tiếp, bộ phim chạy tiếp như cũ. */
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible' && hasStarted && audio.paused && !audio.ended && !window.__userPausedMusic) {
-    audio.play().catch(() => {});
+  if (document.visibilityState === 'visible') {
+    keepScreenAwake();
+    if (hasStarted && audio.paused && !audio.ended && !window.__userPausedMusic) {
+      audio.play().catch(() => {});
+    }
   }
   updatePlayer();
 });

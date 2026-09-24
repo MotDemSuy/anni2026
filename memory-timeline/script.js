@@ -383,9 +383,21 @@ musicToggle.addEventListener("click", () => {
    8) START — intro → album tự chạy
    ============================================================ */
 
+/* Giữ màn hình luôn sáng khi album đang chạy (Wake Lock API). */
+let wakeLock = null;
+async function keepScreenAwake() {
+  try {
+    if ("wakeLock" in navigator && !wakeLock) {
+      wakeLock = await navigator.wakeLock.request("screen");
+      wakeLock.addEventListener("release", () => { wakeLock = null; });
+    }
+  } catch (e) { /* không hỗ trợ / bị chặn — im lặng */ }
+}
+
 function startExperience() {
   if (started) return;
   started = true;
+  keepScreenAwake();
   introEl.classList.add("is-hidden");
   playMusic();           // lỗi / chặn → audio "error" listener tự bật ticker
   goTo(0, "dissolve");
@@ -403,6 +415,7 @@ document.addEventListener("keydown", (e) => {
    không tự bật lại. Quay lại tab album chạy tiếp như cũ. */
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible" && started) {
+    keepScreenAwake();
     if (audio && audio.paused && !audio.ended && !window.__userPausedMusic) playMusic();
     syncPageToAudio();
   }

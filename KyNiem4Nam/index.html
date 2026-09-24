@@ -180,43 +180,29 @@
   </section>
 
   <script>
-    // Mỗi câu có mốc bắt đầu tính bằng giây. Trang sẽ bám theo thời gian
-    // thực của nhac.mp3, không còn đổi lời theo một khoảng cố định nữa.
-    // Nếu bản nhạc của bạn có đoạn dạo khác, chỉ cần sửa số sau "at".
-    // Mỗi câu có mốc bắt đầu tính bằng giây, neo đúng LÚC GIỌNG CẤT LỜI
-    // (phân tích onset giọng từ file nhac.mp3 thật - không đặt chữ sớm trước giọng).
+    // Mỗi câu neo tại lúc từ đầu tiên được hát trong nhac.mp3.
+    // Đoạn sau 74.5 giây là nhạc dạo nên không hiện lời.
     const syncedLyrics = [
-      { at: 14.8, text: "Bốn năm trôi qua" },
-      { at: 17.0, text: "Ta vẫn bên nhau" },
-      { at: 18.5, text: "Không còn vội vàng như những ngày đầu" },
-      { at: 21.7, text: "Anh nhìn em cười và rồi lại nói" },
-      { at: 24.5, text: "Ta đã quen nhau như những ngày đầu" },
-      { at: 30.9, text: "Vẫn là người ấy" },
-      { at: 32.9, text: "Vẫn là bàn tay" },
-      { at: 34.1, text: "Nắm thật chặt lấy" },
-      { at: 35.7, text: "Dẫu đời đổi thay (hey)" },
-      { at: 38.3, text: "Đi từng đoạn ngắn" },
-      { at: 40.0, text: "Hóa thành đường dài" },
-      { at: 44.3, text: "Bước chậm cùng nhau" },
-      { at: 46.6, text: "Chẳng cần đến ai" },
-      { at: 48.9, text: "Vẫn là ánh mắt" },
-      { at: 50.5, text: "Vẫn là môi quen" },
-      { at: 52.1, text: "Vẫn gọi tên nhau giữa bao ngàn xem" },
-      { at: 55.0, text: "Bao lần ngã xuống" },
-      { at: 56.9, text: "Ngẩng đầu nhìn nhau" },
-      { at: 58.9, text: "Mình lại yêu thêm như những ngày đầu (oh-oh)" },
-      { at: 62.5, text: "Vẫn là người ấy" },
-      { at: 64.3, text: "Vẫn là bàn tay" },
-      { at: 65.7, text: "Nắm thật chặt lấy" },
-      { at: 67.4, text: "Dẫu đời đổi thay (hey)" },
-      { at: 70.1, text: "Đi từng đoạn ngắn" },
-      { at: 71.7, text: "Hóa thành đường dài" },
-      { at: 76.3, text: "Bước chậm cùng nhau" },
-      { at: 78.3, text: "Chẳng cần đến ai" },
-      { at: 83.5, text: "Bao lần ngã xuống" },
-      { at: 85.8, text: "Ngẩng đầu nhìn nhau" },
-      { at: 90.8, text: "Mình lại yêu thêm như những ngày đầu (oh-oh)" },
-      { at: 94.0, text: "♪ ..." }
+      { at: 13.7, text: "Bốn năm trôi qua" },
+      { at: 16.4, text: "Ta vẫn bên nhau" },
+      { at: 21.0, text: "Không còn vội vàng như những ngày đầu" },
+      { at: 30.2, text: "Anh nhìn em cười và rồi lại nói" },
+      { at: 37.6, text: "Ta đã quen nhau như những ngày đầu" },
+      { at: 43.6, text: "Vẫn là người ấy" },
+      { at: 46.1, text: "Vẫn là bàn tay" },
+      { at: 47.3, text: "Nắm thật chặt lấy" },
+      { at: 49.2, text: "Dẫu đời đổi thay" },
+      { at: 50.9, text: "Đi từng đoạn ngắn" },
+      { at: 52.9, text: "Hóa thành đường dài" },
+      { at: 54.5, text: "Bước chậm cùng nhau" },
+      { at: 56.9, text: "Chẳng cần đến ai" },
+      { at: 58.1, text: "Vẫn là ánh mắt" },
+      { at: 60.3, text: "Vẫn là môi quen" },
+      { at: 61.6, text: "Vẫn gọi tên nhau giữa bao ngàn xem" },
+      { at: 65.0, text: "Bao lần ngã xuống" },
+      { at: 67.2, text: "Ngẩng đầu nhìn nhau" },
+      { at: 68.8, text: "Mình lại yêu thêm như những ngày đầu" },
+      { at: 74.5, text: "♪ ..." }
     ];
     const letter = `Thấm thoắt mà chúng mình đã đi cùng nhau bốn năm rồi.
 
@@ -233,16 +219,16 @@ Yêu em hôm nay, và cả những ngày sau nữa.`;
     const vinyl = document.querySelector('#vinyl');
     const audio = document.querySelector('#bgMusic');
     const musicToggle = document.querySelector('#musicToggle');
-    let activeLyricIndex = -1, typingTimer;
+    let activeLyricIndex = -1, lyricFrame, typingTimer;
 
     function showLyric(index) {
       if (index === activeLyricIndex) return;
       activeLyricIndex = index;
       lyricLine.classList.add('changing');
-      setTimeout(() => {
-        lyricLine.textContent = index >= 0 ? syncedLyrics[index].text : "♪ ...";
+      lyricLine.textContent = index >= 0 ? syncedLyrics[index].text : "♪ ...";
+      requestAnimationFrame(() => {
         lyricLine.classList.remove('changing');
-      }, 140);
+      });
     }
     function syncLyrics() {
       const time = audio.currentTime;
@@ -254,6 +240,16 @@ Yêu em hôm nay, và cả những ngày sau nữa.`;
       showLyric(index);
       if (Number.isFinite(audio.duration)) progress.style.width = `${Math.min(100, time / audio.duration * 100)}%`;
     }
+    function syncWhilePlaying() {
+      syncLyrics();
+      if (!audio.paused && !audio.ended) lyricFrame = requestAnimationFrame(syncWhilePlaying);
+    }
+    function startLyricSync() {
+      cancelAnimationFrame(lyricFrame);
+      syncWhilePlaying();
+    }
+    audio.addEventListener('play', startLyricSync);
+    audio.addEventListener('pause', () => cancelAnimationFrame(lyricFrame));
     audio.addEventListener('timeupdate', syncLyrics);
     audio.addEventListener('seeked', syncLyrics);
     audio.addEventListener('loadedmetadata', syncLyrics);
@@ -301,10 +297,26 @@ Yêu em hôm nay, và cả những ngày sau nữa.`;
     // Màn mở đầu chính là thao tác đó: bấm lời chúc / nút Mở nhạc là nhạc vang ngay.
     const introScreen = document.querySelector('#introScreen');
     function openFromIntro() {
+      keepScreenAwake();
       playMusic();
       document.body.classList.add('intro-done');
     }
     introScreen.addEventListener('click', openFromIntro, { once: true });
+
+    /* Giữ màn hình luôn sáng khi đang nghe/xem (Wake Lock API).
+       Rời tab bị mất khoá → quay lại tự xin lại. Máy không hỗ trợ thì bỏ qua. */
+    let wakeLock = null;
+    async function keepScreenAwake() {
+      try {
+        if ('wakeLock' in navigator && !wakeLock) {
+          wakeLock = await navigator.wakeLock.request('screen');
+          wakeLock.addEventListener('release', () => { wakeLock = null; });
+        }
+      } catch (e) { /* không hỗ trợ / bị chặn — im lặng */ }
+    }
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && document.body.classList.contains('intro-done')) keepScreenAwake();
+    });
 
     /* Nhớ vị trí gõ: đóng thư giữa chừng rồi mở lại sẽ gõ tiếp từ chỗ dừng;
      * gõ xong rồi thì lần mở sau hiện nguyên lá thư luôn, không typing lại. */

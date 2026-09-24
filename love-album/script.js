@@ -68,9 +68,21 @@ function update() {
   if (index !== activeIndex) showPage(index);
   if (!music.paused && !music.ended) requestAnimationFrame(update);
 }
+/* Giữ màn hình luôn sáng khi album đang chạy (Wake Lock API). */
+let wakeLock = null;
+async function keepScreenAwake() {
+  try {
+    if ('wakeLock' in navigator && !wakeLock) {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', () => { wakeLock = null; });
+    }
+  } catch (e) { /* không hỗ trợ / bị chặn — im lặng */ }
+}
+
 async function begin() {
   if (started) return;
   started = true;
+  keepScreenAwake();
   experience.classList.add('is-playing');
   cover.classList.add('is-opening');
   try { await music.play(); } catch (error) { console.warn('Audio cần được phát từ thao tác người dùng.', error); }
@@ -92,10 +104,12 @@ document.addEventListener('click', (e) => {
 /* Rời tab / tắt màn hình: điện thoại tự pause nhạc — không phải người dùng dừng.
    Quay lại tab (hoặc bấm Back về) thì tự phát tiếp, cuốn sách lật trang tiếp như cũ. */
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible' && started && music.paused && !music.ended && !window.__userPausedMusic) {
-    music.play().catch(() => {});
+  if (document.visibilityState === 'visible') {
+    if (started) { keepScreenAwake(); requestAnimationFrame(update); }
+    if (started && music.paused && !music.ended && !window.__userPausedMusic) {
+      music.play().catch(() => {});
+    }
   }
-  if (started) requestAnimationFrame(update);
 });
 window.addEventListener('pageshow', () => {
   if (started && music.paused && !music.ended && !window.__userPausedMusic) music.play().catch(() => {});
